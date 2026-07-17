@@ -93,7 +93,7 @@ struct ContentView: View {
                     NSPasteboard.general.setString(manager.log, forType: .string)
                 }
                 .disabled(manager.log.isEmpty)
-                Button("Clear") { manager.log = "" }
+                Button("clear") { manager.log = "" }
                     .disabled(manager.log.isEmpty)
             }
         }

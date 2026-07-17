@@ -9,6 +9,7 @@
 "ready" = "Prêt.";
 "log" = "Journal";
 "copy" = "Copier";
+"clear" = "Supprimer";
 "file_picker_error_format" = "Erreur du sélecteur de fichier : %@\n";
 
 /* Réglages */

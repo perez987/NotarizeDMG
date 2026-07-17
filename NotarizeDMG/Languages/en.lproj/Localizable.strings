@@ -9,6 +9,7 @@
 "ready" = "Ready.";
 "log" = "Log";
 "copy" = "Copy";
+"clear" = "Clear";
 "file_picker_error_format" = "File picker error: %@\n";
 
 /* Settings */

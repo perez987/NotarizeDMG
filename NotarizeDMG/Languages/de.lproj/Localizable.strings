@@ -9,6 +9,7 @@
 "ready" = "Bereit.";
 "log" = "Protokoll";
 "copy" = "Kopieren";
+"clear" = "Supprimer";
 "file_picker_error_format" = "Dateiauswahl-Fehler: %@\n";
 
 /* Einstellungen */

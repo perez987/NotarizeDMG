@@ -9,6 +9,7 @@
 "ready" = "Listo.";
 "log" = "Registro";
 "copy" = "Copiar";
+"clear" = "Limpiar";
 "file_picker_error_format" = "Error del selector de archivos: %@\n";
 
 /* Ajustes */
