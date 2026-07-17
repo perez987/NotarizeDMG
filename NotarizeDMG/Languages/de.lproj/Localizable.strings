@@ -1,0 +1,34 @@
+/* Allgemeine UI */
+"drop_dmg_here" = "DMG hier ablegen";
+"browse" = "Durchsuchen…";
+"configure_credentials_in_settings" = "Anmeldedaten in Einstellungen konfigurieren";
+"settings" = "Einstellungen…";
+"cancel" = "Abbrechen";
+"save" = "Speichern";
+"notarize" = "Notarisieren";
+"ready" = "Bereit.";
+"log" = "Protokoll";
+"copy" = "Kopieren";
+"file_picker_error_format" = "Dateiauswahl-Fehler: %@\n";
+
+/* Einstellungen */
+"signing_identity" = "Signaturidentität";
+"signing_identity_example" = "Developer ID Application: Ihr Name (xxxxxxxxxx)\n";
+"code_signing" = "Code-Signierung";
+"apple_developer_account" = "Apple-Entwicklerkonto";
+"apple_id" = "Apple ID (E-Mail)";
+"apple_email_placeholder" = "";
+"team_id" = "Team-ID";
+"team_id_placeholder" = "";
+"app_specific_password" = "App-spezifisches Passwort";
+"app_specific_password_placeholder" = "";
+"generate_app_password_footer" = "Erstellen Sie ein app-spezifisches Passwort auf [appleid.apple.com](https://account.apple.com).";
+
+/* Sprachauswahl */
+"menu_language" = "Sprache";
+"menu_select_language" = "Sprache auswählen...";
+"language_selector_title" = "Sprache auswählen";
+"accept" = "Akzeptieren";
+"ok" = "OK";
+"language_changed_title" = "Sprache geändert";
+"language_changed_message" = "Bitte starten Sie die Anwendung neu,\num die neue Sprache anzuwenden.";
