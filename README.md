@@ -39,7 +39,7 @@ The created DMG image has an elegant design that I really like:
 - larger icon size
 - background indicating to dragg the app onto the Applications link
 - window size adjusted to the background
-- the open disk image icon has the app icon integrated.
+- the open disk image icon has the application icon integrated.
 
 |     |
 |:---:|
