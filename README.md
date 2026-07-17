@@ -5,7 +5,6 @@ A macOS SwiftUI utility that notarizes a signed DMG image with Apple in three st
 |     |
 |:---:|
 | ![Main window](Images/Main-window.png) |
-| ![Swttings window](Images/Settings-window.png) |
 
 ## Features
 
