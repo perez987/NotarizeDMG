@@ -15,12 +15,13 @@ struct SettingsView: View {
                 Section {
                     LabeledContent(NSLocalizedString("signing_identity", comment: "Signing identity field")) {
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
-                                .font(.body)
-                                .foregroundStyle(.secondary)
                             TextField("", text: $signingIdentity)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(maxWidth: .infinity)
+                            Spacer()
+                            Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
+                                .font(.body)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 } header: {
@@ -83,7 +84,7 @@ struct SettingsView: View {
             }
             .padding()
         }
-        .frame(width: 500, height: 480)
+        .frame(width: 500, height: 380)
         .onAppear {
             signingIdentity = credentials.signingIdentity
             appleID         = credentials.appleID

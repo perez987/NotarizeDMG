@@ -13,10 +13,10 @@
 "file_picker_error_format" = "Dateiauswahl-Fehler: %@\n";
 
 /* Einstellungen */
-"signing_identity" = "Signaturidentität";
-"signing_identity_example" = "Developer ID Application: Ihr Name (xxxxxxxxxx)\n";
+"signing_identity" = "Signaturidentität\n";
+"signing_identity_example" = "Developer ID Application: Ihr Name (xxxxxxxxxx)";
 "code_signing" = "Code-Signierung";
-"apple_developer_account" = "Apple-Entwicklerkonto";
+"apple_developer_account" = "Apple-Entwicklerkonto\n";
 "apple_id" = "Apple ID (E-Mail)";
 "apple_email_placeholder" = "";
 "team_id" = "Team-ID";
