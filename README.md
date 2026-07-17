@@ -46,7 +46,7 @@ The created DMG image has an elegant design that I really like:
 
 ## Requirements
 
-- macOS 13 Ventura or later
+- macOS 14 Sonoma or later
 - Xcode 15 or later
 - An Apple Developer account with a **Developer ID Application** certificate
 - An **app-specific password** generated at [appleid.apple.com](https://appleid.apple.com)

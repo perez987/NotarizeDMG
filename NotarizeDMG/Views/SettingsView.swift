@@ -18,6 +18,7 @@ struct SettingsView: View {
                             TextField("", text: $signingIdentity)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(maxWidth: .infinity)
+                                .foregroundStyle(.secondary)
                             Spacer()
                             Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
                                 .font(.body)
@@ -31,11 +32,13 @@ struct SettingsView: View {
                 Section {
                     LabeledContent(NSLocalizedString("apple_id", comment: "Apple ID field")) {
                         TextField(NSLocalizedString("apple_email_placeholder", comment: "Apple email placeholder"), text: $appleID)
+                            .foregroundStyle(.secondary)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: .infinity)
                     }
                     LabeledContent(NSLocalizedString("team_id", comment: "Team ID field")) {
                         TextField(NSLocalizedString("team_id_placeholder", comment: "Team ID placeholder"), text: $teamID)
+                            .foregroundStyle(.secondary)
                             .textFieldStyle(.roundedBorder)
                             .frame(maxWidth: .infinity)
                             .font(.body)
@@ -43,6 +46,7 @@ struct SettingsView: View {
                     LabeledContent(NSLocalizedString("app_specific_password", comment: "App-specific password field")) {
                         VStack(alignment: .leading, spacing: 3) {
                             SecureField("", text: $appPassword)
+                                .foregroundStyle(.secondary)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(maxWidth: .infinity)
                             Text(NSLocalizedString("app_specific_password_placeholder", comment: "App password example"))
