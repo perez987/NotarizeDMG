@@ -93,6 +93,16 @@ struct SettingsView: View {
             appleID         = credentials.appleID
             teamID          = credentials.teamID
             appPassword     = credentials.appPassword
+
+            DispatchQueue.main.async {
+                guard let settingsWindow = NSApp.keyWindow,
+                      let mainWindow = NSApp.windows.first(where: { $0 !== settingsWindow && $0.isVisible })
+                else { return }
+                let mainFrame = mainWindow.frame
+                let x = mainFrame.midX - settingsWindow.frame.width / 2
+                let y = mainFrame.midY - settingsWindow.frame.height / 2
+                settingsWindow.setFrameOrigin(NSPoint(x: x, y: y))
+            }
         }
     }
 }
