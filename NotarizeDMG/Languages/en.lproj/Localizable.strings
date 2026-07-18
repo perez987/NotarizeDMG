@@ -17,7 +17,7 @@
 "signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
 "code_signing" = "Code Signing";
 "apple_developer_account" = "Apple Developer Account\n";
-"apple_id" = "Apple ID (email)";
+"apple_id" = "Apple ID";
 "apple_email_placeholder" = "";
 "team_id" = "Team ID";
 "team_id_placeholder" = "";

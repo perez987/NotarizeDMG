@@ -14,13 +14,13 @@ struct SettingsView: View {
             Form {
                 Section {
                     LabeledContent(NSLocalizedString("signing_identity", comment: "Signing identity field")) {
-                        VStack(alignment: .leading, spacing: 3) {
+                        VStack(alignment: .trailing, spacing: 3) {
                             TextField("", text: $signingIdentity)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 300)
                                 .foregroundStyle(.secondary)
                             Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
-                                .font(.body)
+                                .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -59,7 +59,7 @@ struct SettingsView: View {
                     let footerString = NSLocalizedString("generate_app_password_footer", comment: "App password footer")
                     Text((try? AttributedString(markdown: footerString)) ?? AttributedString(footerString))
                         .foregroundStyle(.secondary)
-                        .font(.body)
+                        .font(.callout)
                 }
             }
             .formStyle(.grouped)
