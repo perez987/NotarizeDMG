@@ -85,5 +85,5 @@ xcrun stapler staple "<path/to/file.dmg>"
 ## Security notes
 
 - App Sandbox is **disabled** (`com.apple.security.app-sandbox = false`). This is required so the app can invoke `codesign` and `xcrun` as child processes.
-- All four credentials are stored in the system Keychain under the service name `com.notarizedmg.app` using `kSecAttrAccessibleWhenUnlocked`. They are never written to disk in plain text.
+- All four credentials are stored in the system Keychain under the service name `perez987.notarizedmg` using `kSecAttrAccessibleWhenUnlocked`. They are never written to disk in plain text.
 - The app password field uses `SecureField` and is never logged.
