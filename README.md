@@ -88,3 +88,4 @@ xcrun stapler staple "<path/to/file.dmg>"
 - App Sandbox is **disabled** (`com.apple.security.app-sandbox = false`). This is required so the app can invoke `codesign` and `xcrun` as child processes.
 - All four credentials are stored in the system Keychain under the service name `perez987.notarizedmg` using `kSecAttrAccessibleWhenUnlocked`. They are never written to disk in plain text.
 - The app password field uses `SecureField` and is never logged.
+- The first time you enter your developer identity information, four secure keys are saved in the Keychain at `perez987.notarizedmg`: `signingIdentity`, `appleID`, `teamID`, and `apPassd`. For this reason, when you open NotarizeDMG after saving the keys, macOS prompts you for your session keychain password four times, once for each saved key. This only happens once.
