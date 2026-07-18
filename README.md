@@ -1,6 +1,6 @@
 # NotarizeDMG
 
-A macOS SwiftUI utility that notarizes a signed or un-signed DMG image with Apple in three steps, all from a single window.
+A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple in three steps, all from a single window.
 
 |     |
 |:---:|
@@ -62,7 +62,7 @@ The created DMG image has an elegant design that I really like:
    - **Team ID** — your 10-character team identifier
    - **App-Specific Password** — generated at appleid.apple.com
 5. Save the data you have filled in (they are stored in the system Keychain)
-6. Drop (or browse to) a signed `.dmg`, then click **Notarize**.
+6. Drop (or browse to) a signed or unsigned `.dmg`, then click **Notarize**.
 
 ## Notarization workflow
 
