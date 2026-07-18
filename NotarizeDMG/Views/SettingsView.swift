@@ -17,9 +17,8 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 3) {
                             TextField("", text: $signingIdentity)
                                 .textFieldStyle(.roundedBorder)
-                                .frame(maxWidth: .infinity)
+                                .frame(width: 300)
                                 .foregroundStyle(.secondary)
-                            Spacer()
                             Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
                                 .font(.body)
                                 .foregroundStyle(.secondary)
