@@ -13,8 +13,8 @@
 "file_picker_error_format" = "File picker error: %@\n";
 
 /* Settings */
-"signing_identity" = "Signing Identity\n";
-"signing_identity_example" = "Developer ID Application: Your Name (xxxxxxxxxx)";
+"signing_identity" = "Identity\n";
+"signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
 "code_signing" = "Code Signing";
 "apple_developer_account" = "Apple Developer Account\n";
 "apple_id" = "Apple ID (email)";
@@ -23,7 +23,7 @@
 "team_id_placeholder" = "";
 "app_specific_password" = "App-Specific Password";
 "app_specific_password_placeholder" = "";
-"generate_app_password_footer" = "Generate an app-specific password at [appleid.apple.com](https://account.apple.com).";
+"generate_app_password_footer" = "Generate an app-specific password at [appleid.apple.com](https://account.apple.com) under «Sign-In and Security» > «App-Specific Passwords».";
 
 /* Language selector */
 "menu_language" = "Language";
