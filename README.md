@@ -28,7 +28,7 @@ To easily create a DMG image with a more polished look, I use the free command-l
 - Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
 - `create-dmg` is available in `/usr/local/bin/create-dmg` (Intel Mac) or `/opt/homebrew/bin/create-dmg` (Silicon Mac).
 - The tool can be run from Terminal with `create-dmg`
-- The only mandatory argument is the DMG file name, e.g.<br>`create-dmg NotarizeDMG 1.0.4.dmg`
+- The only mandatory argument is the app file name, e.g.<br>`create-dmg NotarizeDMG.app`
 - The result is created in the same folder from which you are running the tool in Terminal
 - As a bonus, the DMG image is already digitally signed.
 
