@@ -19,7 +19,7 @@ A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple
 
 ## Add-on
 
-NotarizeDMG requires a DMG file (digitally signed or not) as its source. This DMG contains a macOS application digitally signed with an Apple Development ID. There are ways to create the DMG image, including using built-in macOS tools, but when you open the DMG in the Finder window, its design is very basic, with a large window and small icons.
+NotarizeDMG requires a DMG file (digitally signed or not) as its source. This DMG contains a macOS application digitally signed with an Apple Development ID. There are ways to create the DMG image, including built-in macOS tools, but when you open the DMG in the Finder window, its design is very basic, with a large window and small icons.
 
 To easily create a DMG image with a more polished look, I use the free command-line tool [create-dmg](https://github.com/sindresorhus/create-dmg) by *Sindresorhus*. Installation and use are simple:
 
