@@ -20,9 +20,11 @@ struct SettingsView: View {
                                 .frame(width: 300)
                                 .foregroundStyle(.secondary)
                             Text(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
-                                .font(.callout)
+                                .font(.footnote)
                                 .foregroundStyle(.secondary)
                         }
+                        .help(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
+
                     }
                 } header: {
                     Text(NSLocalizedString("code_signing", comment: "Code signing section title"))
@@ -87,7 +89,7 @@ struct SettingsView: View {
             }
             .padding()
         }
-        .frame(width: 500, height: 380)
+        .frame(width: 500, height: 470)
         .onAppear {
             signingIdentity = credentials.signingIdentity
             appleID         = credentials.appleID

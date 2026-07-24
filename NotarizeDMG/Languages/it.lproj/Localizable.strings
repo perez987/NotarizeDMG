@@ -6,7 +6,7 @@
 "cancel" = "Annulla";
 "save" = "Salva";
 "notarize" = "Notarizza";
-"ready" = "Pronto.";
+"ready" = "Preparato";
 "log" = "Registro";
 "copy" = "Copia";
 "file_picker_error_format" = "Errore selettore file: %@\n";

@@ -71,7 +71,7 @@ struct ContentView: View {
         GroupBox {
             ScrollViewReader { proxy in
                 ScrollView {
-                    Text(manager.log.isEmpty ? "Ready." : manager.log)
+                    Text(manager.log.isEmpty ? NSLocalizedString("ready", comment: "Log ready") : manager.log)
                         .font(.system(.body))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(4)
