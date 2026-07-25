@@ -21,9 +21,23 @@ A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple
 
 NotarizeDMG requires a DMG file (digitally signed or not) as its source. This DMG contains a macOS application digitally signed with an Apple Development ID. There are ways to create the DMG image, including built-in macOS tools, but when you open the DMG in the Finder window, its design is very basic, with a large window and small icons.
 
-To easily create a DMG image with a more polished look, I use the free command-line tool [create-dmg](https://github.com/sindresorhus/create-dmg) by *Sindresorhus*. Installation and use are simple:
+To easily create a DMG image with a more polished look, I use the free command-line tool [create-dmg](https://github.com/sindresorhus/create-dmg) by *Sindresorhus*.
 
-- Prerequisite: [Node.js 20](https://nodejs.org/es) or later installed 
+The prerequisite to have create-dmg is Node.js 20 or later installed. One way to install Node is through the Homebrew package manager. While this is an extra step compared to installing Node directly from its own installer, it can help you avoid permissions errors and other issues.
+
+To install Homebrew:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+To install Node:
+
+`brew install node`
+
+Afterward, you can install -create-dmg:
+
+
 - Run<br>`npm install --global create-dmg` in Terminal
 - Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
 - `create-dmg` is available in `/usr/local/bin/create-dmg` (Intel Mac) or `/opt/homebrew/bin/create-dmg` (Silicon Mac).
