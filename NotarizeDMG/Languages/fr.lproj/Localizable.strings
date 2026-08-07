@@ -11,6 +11,7 @@
 "copy" = "Copier";
 "clear" = "Supprimer";
 "file_picker_error_format" = "Erreur du sélecteur de fichier : %@\n";
+"help" = "Aide";
 
 /* Réglages */
 "signing_identity" = "Identité\n";
@@ -21,7 +22,7 @@
 "apple_email_placeholder" = "";
 "team_id" = "Team ID";
 "team_id_placeholder" = "";
-"app_specific_password" = "Mot de passe spécifique à l’app";
+"app_specific_password" = "Mot de passe spécifique à l'app";
 "app_specific_password_placeholder" = "";
 "generate_app_password_footer" = "Générez un mot de passe spécifique à l'app sur [appleid.apple.com](https://account.apple.com) dans la section «Sign-In and Security» > «App-Specific Passwords».";
 
@@ -33,3 +34,15 @@
 "ok" = "OK";
 "language_changed_title" = "Langue modifiée";
 "language_changed_message" = "Veuillez redémarrer l'application\npour appliquer la nouvelle langue.";
+
+/* Aide */
+"notarizeDMG_help" = "Aide supplémentaire de NotarizeDMG";
+"help_title" = "Module complémentaire : create-dmg";
+"help_step1_title" = "Qu'est-ce que create-dmg ?";
+"help_step1_body" = "NotarizeDMG requiert une image DMG d'une application macOS signée numériquement. Il existe un outil, [create-dmg](https://github.com/sindresorhus/create-dmg), qui crée des images DMG d'applications macOS avec un design de fenêtre élégant et soigné.";
+"help_step2_title" = "Installer create-dmg";
+"help_step2_body" = "Pour installer create-dmg sur votre système, suivez ces étapes :\n⎯ Installez [Homebrew](https://brew.sh)\n⎯ Installez Node 20+ → `brew install node`\n⎯ Installez create-dmg → `npm install --global create-dmg`\n⎯ Facultatif → Si vous recevez un message concernant\n     `allow-scripts=fs-xattr,macos-alias`\n     exécutez\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
+"help_step3_title" = "Utiliser create-dmg";
+"help_step3_body" = "⎯ create-dmg est disponible dans\n     `/usr/local/bin/create-dmg` (Mac Intel)\n     `/opt/homebrew/bin/create-dmg` (Mac Apple Silicon).\n⎯ Exécutez → `create-dmg <fichier.dmg>`.\n⎯ Le résultat est créé dans le dossier depuis lequel vous exécutez le Terminal.\n⎯ De plus, l'image DMG est déjà signée numériquement.";
+"help_workflow_title" = "Ce qui se passe en coulisses";
+"help_workflow_body" = "L'app exécute trois commandes en séquence :\n⎯ `codesign --sign \"<Identité>\" --timestamp \"<fichier.dmg>\"`\n⎯ `xcrun notarytool submit \"<fichier.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<fichier.dmg>\"`";

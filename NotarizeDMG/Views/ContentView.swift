@@ -7,6 +7,7 @@ struct ContentView: View {
 
     @State private var showFilePicker  = false
     @State private var showSettings    = false
+    @State private var showHelp        = false
     @State private var isDropTargeted  = false
 
     var body: some View {
@@ -38,10 +39,14 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView().environmentObject(credentials)
         }
+        .sheet(isPresented: $showHelp) {
+            HelpView()
+        }
     }
 
     private var controlsRow: some View {
         HStack(spacing: 12) {
+            Spacer()
             if !credentials.isValid {
                 Label(NSLocalizedString("configure_credentials_in_settings", comment: "Missing credentials warning"),
                       systemImage: "exclamationmark.triangle.fill")
@@ -51,6 +56,11 @@ struct ContentView: View {
             Spacer()
             Button(NSLocalizedString("settings", comment: "Settings button")) { showSettings = true }
             notarizeButton
+            Button { showHelp = true } label: {
+                Image(systemName: "questionmark.circle")
+                    .font(.system(size: 22))
+            }
+            .help(NSLocalizedString("notarizeDMG_help", comment: "Help button tooltip"))
         }
     }
 

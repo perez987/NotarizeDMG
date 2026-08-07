@@ -11,6 +11,7 @@
 "copy" = "Copiar";
 "clear" = "Limpiar";
 "file_picker_error_format" = "Error del selector de archivos: %@\n";
+"help" = "Ayuda";
 
 /* Ajustes */
 "signing_identity" = "Identidad\n";
@@ -33,3 +34,14 @@
 "ok" = "Aceptar";
 "language_changed_title" = "Idioma cambiado";
 "language_changed_message" = "Reinicia la aplicación\npara aplicar el nuevo idioma.";
+
+/* Ayuda */
+"help_title" = "Complemento: create-dmg";
+"help_step1_title" = "¿Qué es create-dmg?";
+"help_step1_body" = "NotarizeDMG requiere una imagen DMG de una aplicación macOS firmada digitalmente. Existe una herramienta, [create-dmg](https://github.com/sindresorhus/create-dmg), que crea imágenes DMG de aplicaciones macOS con un diseño elegante de la ventana";
+"help_step2_title" = "Instalar create-dmg";
+"help_step2_body" = "Para tener create-dmg en tu sistema, debes seguir estos pasos:\n⎯ Instala [Homebrew](https://brew.sh)\n⎯ Instala Node 20+ → `brew install node`\n⎯ Instala create-dmg → `npm install --global create-dmg`\n⎯ Opcional → Si recibes el mensaje\n     `allow-scripts=fs-xattr,macos-alias`\n     ejecuta\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
+"help_step3_title" = "Usar create-dmg";
+"help_step3_body" = "⎯ create-dmg está disponible en\n     `/usr/local/bin/create-dmg` (Mac Intel)\n     `/opt/homebrew/bin/create-dmg` (Mac Silicon).\n⎯ Ejecuta → `create-dmg <archivo.dmg>`.\n⎯ El resultado se crea en la carpeta desde la que ejecutas Terminal.\n⎯ Además, la imagen DMG ya está firmada digitalmente";
+"help_workflow_title" = "¿Qué ocurre internamente?";
+"help_workflow_body" = "La app ejecuta tres comandos en secuencia:\n⎯ `codesign --sign \"<Identidad>\" --timestamp \"<archivo.dmg>\"`\n⎯ `xcrun notarytool submit \"<archivo.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<archivo.dmg>\"`";
