@@ -2,7 +2,7 @@ import Foundation
 
 @MainActor
 final class NotarizationManager: ObservableObject {
-    @Published var log       = ""
+    @Published var log = ""
     @Published var isRunning = false
     @Published var dmgURL: URL?
     @Published var appURL: URL?
@@ -115,7 +115,7 @@ final class NotarizationManager: ObservableObject {
 
         let dmgs = files.filter {
             $0.pathExtension.lowercased() == "dmg" &&
-            $0.lastPathComponent.lowercased().hasPrefix(appName.lowercased())
+                $0.lastPathComponent.lowercased().hasPrefix(appName.lowercased())
         }
         return dmgs.sorted { a, b in
             let d1 = (try? a.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? .distantPast
@@ -133,7 +133,7 @@ final class NotarizationManager: ObservableObject {
             let signExit = await shell("/usr/bin/codesign", args: [
                 "--sign", credentials.signingIdentity,
                 "--timestamp",
-                dmgPath
+                dmgPath,
             ])
             guard signExit == 0 else {
                 if !isCancelled {
@@ -148,10 +148,10 @@ final class NotarizationManager: ObservableObject {
         let notarizeExit = await shell("/usr/bin/xcrun", args: [
             "notarytool", "submit",
             dmgPath,
-            "--apple-id",  credentials.appleID,
-            "--password",  credentials.appPassword,
-            "--team-id",   credentials.teamID,
-            "--wait"
+            "--apple-id", credentials.appleID,
+            "--password", credentials.appPassword,
+            "--team-id", credentials.teamID,
+            "--wait",
         ])
         guard notarizeExit == 0 else {
             if !isCancelled {
@@ -164,7 +164,7 @@ final class NotarizationManager: ObservableObject {
         appendLog("🟦 ──── Step \(3 + stepOffset): Stapling the ticket ────\n\n")
         let stapleExit = await shell("/usr/bin/xcrun", args: [
             "stapler", "staple",
-            dmgPath
+            dmgPath,
         ])
         guard stapleExit == 0 else {
             if !isCancelled {
@@ -182,16 +182,16 @@ final class NotarizationManager: ObservableObject {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 let process = Process()
                 process.executableURL = URL(fileURLWithPath: executable)
-                process.arguments     = args
+                process.arguments = args
 
                 // GUI apps don't inherit the user's shell PATH, so tools like `node`
                 // (required by create-dmg) are not found. Build a PATH that covers
                 // common Homebrew and system binary locations.
                 var env = ProcessInfo.processInfo.environment
                 let extraPaths = [
-                    "/opt/homebrew/bin",        // Homebrew (Apple Silicon)
+                    "/opt/homebrew/bin", // Homebrew (Apple Silicon)
                     "/opt/homebrew/sbin",
-                    "/usr/local/bin",           // Homebrew (Intel) / nvm / npm globals
+                    "/usr/local/bin", // Homebrew (Intel) / nvm / npm globals
                     "/usr/local/sbin",
                     "/usr/bin",
                     "/usr/sbin",
@@ -210,7 +210,7 @@ final class NotarizationManager: ObservableObject {
                 let outPipe = Pipe()
                 let errPipe = Pipe()
                 process.standardOutput = outPipe
-                process.standardError  = errPipe
+                process.standardError = errPipe
 
                 outPipe.fileHandleForReading.readabilityHandler = { fh in
                     let data = fh.availableData

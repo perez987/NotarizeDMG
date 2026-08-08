@@ -21,8 +21,8 @@ struct DropAreaView: View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .fill(isTargeted
-                      ? Color.accentColor.opacity(0.08)
-                      : Color.secondary.opacity(0.05))
+                    ? Color.accentColor.opacity(0.08)
+                    : Color.secondary.opacity(0.05))
 
             RoundedRectangle(cornerRadius: 12)
                 .strokeBorder(
@@ -34,7 +34,7 @@ struct DropAreaView: View {
                 Image(systemName: "arrow.down.circle.dotted")
                     .font(.system(size: 44))
                     .foregroundStyle(isTargeted ? AnyShapeStyle(Color.accentColor)
-                                               : AnyShapeStyle(Color.secondary))
+                        : AnyShapeStyle(Color.secondary))
 
                 if let url = fileURL {
                     VStack(spacing: 2) {
@@ -69,7 +69,7 @@ struct DropAreaView: View {
         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier) { item, _ in
             guard
                 let data = item as? Data,
-                let url  = URL(dataRepresentation: data, relativeTo: nil)
+                let url = URL(dataRepresentation: data, relativeTo: nil)
             else { return }
             let ext = url.pathExtension.lowercased()
             let expected = mode == .notarize ? "dmg" : "app"

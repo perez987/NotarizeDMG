@@ -22,9 +22,9 @@ enum KeychainHelper {
     /// Removes the Keychain item for the given key.
     static func delete(key: String) {
         let query: [CFString: Any] = [
-            kSecClass:       kSecClassGenericPassword,
+            kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: key
+            kSecAttrAccount: key,
         ]
         SecItemDelete(query as CFDictionary)
     }
@@ -49,15 +49,15 @@ enum KeychainHelper {
 
     private static func setData(_ data: Data, forKey key: String) -> Bool {
         let baseQuery: [CFString: Any] = [
-            kSecClass:       kSecClassGenericPassword,
+            kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: key
+            kSecAttrAccount: key,
         ]
         let updateStatus = SecItemUpdate(baseQuery as CFDictionary,
                                          [kSecValueData: data] as CFDictionary)
         if updateStatus == errSecItemNotFound {
             var addQuery = baseQuery
-            addQuery[kSecValueData]      = data
+            addQuery[kSecValueData] = data
             addQuery[kSecAttrAccessible] = kSecAttrAccessibleWhenUnlocked
             return SecItemAdd(addQuery as CFDictionary, nil) == errSecSuccess
         }
@@ -66,11 +66,11 @@ enum KeychainHelper {
 
     private static func loadData(forKey key: String) -> Data? {
         let query: [CFString: Any] = [
-            kSecClass:       kSecClassGenericPassword,
+            kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
             kSecAttrAccount: key,
-            kSecReturnData:  true,
-            kSecMatchLimit:  kSecMatchLimitOne
+            kSecReturnData: true,
+            kSecMatchLimit: kSecMatchLimitOne,
         ]
         var result: AnyObject?
         guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,

@@ -10,7 +10,7 @@
 "build_and_notarize" = "Crear y notarizar";
 "mode_notarize" = "Notarizar DMG";
 "mode_build" = "Crear y notarizar DMG";
-"output_folder_placeholder" = "Elige la carpeta de salida para el DMG…";
+"output_folder_placeholder" = "Elige la carpeta de salida para la DMG…";
 "choose_folder" = "Elegir…";
 "ready" = "Preparado";
 "log" = "Registro";

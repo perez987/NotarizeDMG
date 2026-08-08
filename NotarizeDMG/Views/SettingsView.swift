@@ -5,9 +5,9 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var signingIdentity = ""
-    @State private var appleID         = ""
-    @State private var teamID          = ""
-    @State private var appPassword     = ""
+    @State private var appleID = ""
+    @State private var teamID = ""
+    @State private var appPassword = ""
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,7 +24,6 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         }
                         .help(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
-
                     }
                 } header: {
                     Text(NSLocalizedString("code_signing", comment: "Code signing section title"))
@@ -76,26 +75,25 @@ struct SettingsView: View {
 
                 Button(NSLocalizedString("save", comment: "Save button")) {
                     credentials.signingIdentity = signingIdentity
-                    credentials.appleID         = appleID
-                    credentials.teamID          = teamID
-                    credentials.appPassword     = appPassword
+                    credentials.appleID = appleID
+                    credentials.teamID = teamID
+                    credentials.appPassword = appPassword
                     credentials.save()
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
                 .disabled(signingIdentity.isEmpty || appleID.isEmpty ||
-                          teamID.isEmpty          || appPassword.isEmpty)
+                    teamID.isEmpty || appPassword.isEmpty)
             }
             .padding()
         }
         .frame(width: 500, height: 470)
         .onAppear {
             signingIdentity = credentials.signingIdentity
-            appleID         = credentials.appleID
-            teamID          = credentials.teamID
-            appPassword     = credentials.appPassword
-
+            appleID = credentials.appleID
+            teamID = credentials.teamID
+            appPassword = credentials.appPassword
         }
     }
 }
