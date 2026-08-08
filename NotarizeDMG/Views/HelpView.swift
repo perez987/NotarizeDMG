@@ -18,11 +18,11 @@ struct HelpView: View {
                         title: NSLocalizedString("help_step2_title", comment: "Help step 2 title"),
                         body: NSLocalizedString("help_step2_body", comment: "Help step 2 body")
                     )
-                    helpSection(
-                        icon: "3.circle.fill",
-                        title: NSLocalizedString("help_step3_title", comment: "Help step 3 title"),
-                        body: NSLocalizedString("help_step3_body", comment: "Help step 3 body")
-                    )
+//                    helpSection(
+//                        icon: "3.circle.fill",
+//                        title: NSLocalizedString("help_step3_title", comment: "Help step 3 title"),
+//                        body: NSLocalizedString("help_step3_body", comment: "Help step 3 body")
+//                    )
 //                    helpSection(
 //                        icon: "4.circle.fill",
 //                        title: NSLocalizedString("help_workflow_title", comment: "Help workflow title"),
@@ -43,7 +43,7 @@ struct HelpView: View {
             }
             .padding()
         }
-        .frame(width: 560, height: 440)
+        .frame(width: 580, height: 320)
         .navigationTitle(NSLocalizedString("help_title", comment: "Help window title"))
         .environment(\.openURL, OpenURLAction { url in
             NSWorkspace.shared.open(url)

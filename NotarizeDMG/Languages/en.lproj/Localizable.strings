@@ -1,11 +1,17 @@
 /* General UI */
 "drop_dmg_here" = "Drop DMG here";
+"drop_app_here" = "Drop .app here";
 "browse" = "Browse…";
 "configure_credentials_in_settings" = "Configure credentials in Settings";
 "settings" = "Settings…";
 "cancel" = "Cancel";
 "save" = "Save";
 "notarize" = "Notarize";
+"build_and_notarize" = "Build & Notarize DMG";
+"mode_notarize" = "Notarize DMG";
+"mode_build" = "Build & Notarize";
+"output_folder_placeholder" = "Choose output folder for the DMG…";
+"choose_folder" = "Choose…";
 "ready" = "Ready";
 "log" = "Log";
 "copy" = "Copy";

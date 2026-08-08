@@ -1,11 +1,17 @@
 /* Allgemeine UI */
 "drop_dmg_here" = "DMG hier ablegen";
+"drop_app_here" = "App hier ablegen";
 "browse" = "Durchsuchen…";
 "configure_credentials_in_settings" = "Anmeldedaten in Einstellungen konfigurieren";
 "settings" = "Einstellungen…";
 "cancel" = "Abbrechen";
 "save" = "Speichern";
 "notarize" = "Notarisieren";
+"build_and_notarize" = "DMG erstellen und notarisieren";
+"mode_notarize" = "DMG notarisieren";
+"mode_build" = "Erstellen und notarisieren";
+"output_folder_placeholder" = "Ausgabeordner für das DMG wählen…";
+"choose_folder" = "Wählen…";
 "ready" = "Bereit";
 "log" = "Protokoll";
 "copy" = "Kopieren";

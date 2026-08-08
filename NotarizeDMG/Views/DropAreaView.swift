@@ -2,9 +2,20 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct DropAreaView: View {
-    @Binding var dmgURL: URL?
+    @Binding var fileURL: URL?
     @Binding var isTargeted: Bool
+    var mode: AppMode
     var onBrowse: () -> Void
+
+    private var acceptedType: UTType {
+        mode == .notarize
+            ? (UTType(filenameExtension: "dmg") ?? .data)
+            : (UTType(filenameExtension: "app") ?? .bundle)
+    }
+
+    private var placeholderKey: String {
+        mode == .notarize ? "drop_dmg_here" : "drop_app_here"
+    }
 
     var body: some View {
         ZStack {
@@ -25,7 +36,7 @@ struct DropAreaView: View {
                     .foregroundStyle(isTargeted ? AnyShapeStyle(Color.accentColor)
                                                : AnyShapeStyle(Color.secondary))
 
-                if let url = dmgURL {
+                if let url = fileURL {
                     VStack(spacing: 2) {
                         Text(url.lastPathComponent)
                             .font(.headline)
@@ -36,7 +47,7 @@ struct DropAreaView: View {
                             .truncationMode(.middle)
                     }
                 } else {
-                    Text(NSLocalizedString("drop_dmg_here", comment: "Drop DMG placeholder"))
+                    Text(NSLocalizedString(placeholderKey, comment: "Drop placeholder"))
                         .font(.headline)
                         .foregroundStyle(.secondary)
                 }
@@ -58,10 +69,12 @@ struct DropAreaView: View {
         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier) { item, _ in
             guard
                 let data = item as? Data,
-                let url  = URL(dataRepresentation: data, relativeTo: nil),
-                url.pathExtension.lowercased() == "dmg"
+                let url  = URL(dataRepresentation: data, relativeTo: nil)
             else { return }
-            DispatchQueue.main.async { dmgURL = url }
+            let ext = url.pathExtension.lowercased()
+            let expected = mode == .notarize ? "dmg" : "app"
+            guard ext == expected else { return }
+            DispatchQueue.main.async { fileURL = url }
         }
         return true
     }

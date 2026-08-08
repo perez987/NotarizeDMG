@@ -1,11 +1,17 @@
 /* Interface générale */
 "drop_dmg_here" = "Déposez la DMG ici";
+"drop_app_here" = "Déposez l'app ici";
 "browse" = "Parcourir…";
 "configure_credentials_in_settings" = "Configurez les identifiants dans Réglages";
 "settings" = "Réglages…";
 "cancel" = "Annuler";
 "save" = "Enregistrer";
 "notarize" = "Notariser";
+"build_and_notarize" = "Créer et notariser";
+"mode_notarize" = "Notariser DMG";
+"mode_build" = "Créer et notariser DMG";
+"output_folder_placeholder" = "Choisissez le dossier de destination du DMG…";
+"choose_folder" = "Choisir…";
 "ready" = "Prêt";
 "log" = "Journal";
 "copy" = "Copier";

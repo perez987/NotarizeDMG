@@ -1,14 +1,21 @@
 /* Interfaccia generale */
 "drop_dmg_here" = "Rilascia il file DMG qui";
+"drop_app_here" = "Rilascia l'app qui";
 "browse" = "Sfoglia…";
 "configure_credentials_in_settings" = "Configura le credenziali in Impostazioni";
 "settings" = "Impostazioni…";
 "cancel" = "Annulla";
 "save" = "Salva";
 "notarize" = "Notarizza";
+"build_and_notarize" = "Crea e notarizza";
+"mode_notarize" = "Notarizza DMG";
+"mode_build" = "Crea e notarizza DMG";
+"output_folder_placeholder" = "Scegli la cartella di destinazione del DMG…";
+"choose_folder" = "Scegli…";
 "ready" = "Preparato";
 "log" = "Registro";
 "copy" = "Copia";
+"clear" = "Elimina";
 "file_picker_error_format" = "Errore selettore file: %@\n";
 "help" = "Aiuto";
 
