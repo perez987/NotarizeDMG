@@ -203,6 +203,7 @@ struct ContentView: View {
             VStack {
                 HStack {
                     Label("Log", systemImage: "doc.text.magnifyingglass")
+                        .font(.system(.body))
                     Spacer()
                     Button("copy") {
                         NSPasteboard.general.clearContents()
