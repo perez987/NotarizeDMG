@@ -28,21 +28,29 @@ NotarizeDMG requires a DMG file (digitally signed or not) as its source. This DM
 
 To easily create a DMG image with a more elegant look, I like the free command-line tool [create-dmg](https://github.com/sindresorhus/create-dmg) by *Sindresorhus*.
 
-NotarizeDMG adds `create-dmg` integration with a Build & Notarize mode that delegates DMG creation to the user's already-installed `create-dmg` npm CLI, which produces the expected polished Finder-window layout
+NotarizeDMG adds `create-dmg` integration with a Build & Notarize mode that delegates DMG creation to the user's already-installed `create-dmg` npm CLI, which produces the expected polished Finder-window layout.
+
+Many projects use AppleScript to generate DMG images with custom Finder windows, but it has some drawbacks:
+
+- It doesn't always work well on all supported macOS versions
+- AppleScript requires the user to grant permissions in Privacy & Security → Automation
+- Applying the design to the DMG window is quite slow.
+
+NotarizeDMG, on the other hand, by using `create-dmg` as its DMG creation tool, avoids these drawbacks, doesn't require Automation permission, and image creation is very fast.
 
 The prerequisite to have `create-dmg` is Node.js 20 or later installed. One way to install Node is through the Homebrew package manager. While this is an extra step compared to installing Node directly from its own installer, it can help you avoid permissions errors and other issues.
 
-To install Homebrew:
+1️⃣ Install Homebrew:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-To install Node:
+2️⃣ Install Node:
 
 `brew install node`
 
-Afterward, you can install -create-dmg:
+3️⃣ Install create-dmg:
 
 - Run<br>`npm install --global create-dmg` in Terminal
 - Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
