@@ -43,7 +43,7 @@ struct HelpView: View {
             }
             .padding()
         }
-        .frame(width: 560, height: 440)
+        .frame(width: 560, height: 460)
         .navigationTitle(NSLocalizedString("help_title", comment: "Help window title"))
         .environment(\.openURL, OpenURLAction { url in
             NSWorkspace.shared.open(url)
