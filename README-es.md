@@ -134,7 +134,7 @@ El binario `create-dmg` se detecta automáticamente en `/usr/local/bin/create-dm
 
 ## Notas de seguridad
 
-- El proyecto o incorpora **App Sandbox** (`com.apple.security.app-sandbox = false`). Esto es necesario para que la aplicación pueda invocar `codesign`, `xcrun` y `create-dmg` como procesos hijos.
+- El proyecto no incorpora **App Sandbox** (`com.apple.security.app-sandbox = false`). Esto es necesario para que la aplicación pueda invocar `codesign`, `xcrun` y `create-dmg` como procesos hijos.
 - Las cuatro credenciales se almacenan como un único elemento JSON en el Llavero del sistema bajo el nombre de servicio `perez987.notarizedmg` usando `kSecAttrAccessibleWhenUnlocked`. Nunca se escriben en disco en texto plano.
 - El campo de contraseña de la aplicación usa `SecureField` y nunca se registra en el log.
 - Los elementos del Llavero (separados en 4 campos individuales) de versiones anteriores se migran automáticamente al formato combinado en el primer arranque y luego se eliminan.
