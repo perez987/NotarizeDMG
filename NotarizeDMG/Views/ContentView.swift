@@ -8,6 +8,7 @@ enum AppMode: Int {
 
 struct ContentView: View {
     @EnvironmentObject private var credentials: CredentialsManager
+    @Environment(\.openWindow) private var openWindow
     @StateObject private var manager = NotarizationManager()
     @AppStorage("lastOutputFolderPath") private var lastOutputFolderPath = ""
 
@@ -16,7 +17,6 @@ struct ContentView: View {
     @State private var showAppPicker = false
     @State private var showFolderPicker = false
     @State private var showSettings = false
-    @State private var showHelp = false
     @State private var isDropTargeted = false
 
     var body: some View {
@@ -73,9 +73,6 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView().environmentObject(credentials)
-        }
-        .sheet(isPresented: $showHelp) {
-            HelpView()
         }
         .onAppear {
             guard
@@ -144,7 +141,9 @@ struct ContentView: View {
             Spacer()
             Button(NSLocalizedString("settings", comment: "Settings button")) { showSettings = true }
             mainActionButton
-            Button { showHelp = true } label: {
+            Button {
+                openWindow(id: "help")
+            } label: {
                 Image(systemName: "questionmark.circle")
                     .font(.system(size: 22))
             }

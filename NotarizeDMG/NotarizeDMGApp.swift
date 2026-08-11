@@ -2,6 +2,10 @@ import SwiftUI
 
 @main
 struct NotarizeDMGApp: App {
+    private enum WindowID {
+        static let help = "help"
+    }
+
     @StateObject private var credentials = CredentialsManager.shared
     @State private var isLanguageSelectorPresented = false
 
@@ -12,6 +16,11 @@ struct NotarizeDMGApp: App {
                 .sheet(isPresented: $isLanguageSelectorPresented) {
                     LanguageSelectorView()
                 }
+        }
+        .windowResizability(.contentSize)
+
+        Window(NSLocalizedString("notarizeDMG_help", comment: "Help window title"), id: WindowID.help) {
+            HelpView()
         }
         .windowResizability(.contentSize)
 

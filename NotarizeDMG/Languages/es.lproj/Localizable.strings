@@ -42,6 +42,7 @@
 "language_changed_message" = "Reinicia la aplicación\npara aplicar el nuevo idioma.";
 
 /* Ayuda */
+"notarizeDMG_help" = "Ayuda suplementaria de NotarizeDMG";
 "help_title" = "Complemento: create-dmg";
 "help_step1_title" = "¿Qué es create-dmg?";
 "help_step1_body" = "NotarizeDMG requiere una imagen DMG de una aplicación macOS firmada digitalmente. Existe una herramienta, [create-dmg](https://github.com/sindresorhus/create-dmg), que crea imágenes DMG de aplicaciones macOS con un diseño elegante de la ventana";

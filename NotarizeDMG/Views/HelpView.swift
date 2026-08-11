@@ -6,6 +6,16 @@ struct HelpView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            Text(NSLocalizedString("help_title", comment: "Help window title"))
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.top)
+            
+            Spacer()
+
+//            Divider()
+//                .padding(.top, 8)
+
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     helpSection(
@@ -43,8 +53,7 @@ struct HelpView: View {
             }
             .padding()
         }
-        .frame(width: 560, height: 460)
-        .navigationTitle(NSLocalizedString("help_title", comment: "Help window title"))
+        .frame(width: 560, height: 496)
         .environment(\.openURL, OpenURLAction { url in
             NSWorkspace.shared.open(url)
             return .handled
@@ -53,10 +62,10 @@ struct HelpView: View {
 
     private func helpSection(icon: String, title: String, body: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(.primary)
-                .frame(width: 28)
+//            Image(systemName: icon)
+//                .font(.system(size: 22)) // explicit size avoids CoreUI scaleFactor==0 warnings
+//                .foregroundStyle(.primary)
+//                .frame(width: 28)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
