@@ -3,6 +3,7 @@
 ![Platform](https://img.shields.io/badge/macOS-14-orange.svg)
 ![Swift](https://img.shields.io/badge/Swift-5-blue.svg)
 ![Xcode](https://img.shields.io/badge/Xcode-15-lavender.svg)
+[![Spanish](https://shields.io/badge/Idioma-Español-green.svg)](README-es.md)
 
 A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple, all from a single window. It also integrates the `create-dmg` tool (if installed) to build a polished DMG from a `.app` bundle and notarize it in one go.
 
