@@ -1,6 +1,6 @@
 # NotarizeDMG
 
-NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con Apple una imagen DMG firmada o sin firmar, todo desde una sola ventana. También integra la herramienta `create-dmg` (si está instalada) para crear un DMG con un diseño cuidado a partir de un paquete `.app` y notarizarlo en un solo paso.
+NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con Apple una imagen DMG firmada o sin firmar, todo desde una sola ventana. También integra la herramienta `create-dmg` (si está instalada) para crear una DMG con un diseño cuidado a partir de un paquete `application` y notarizarla en un solo paso.
 
 |                                               |
 | :-------------------------------------------: |
@@ -8,7 +8,7 @@ NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con 
 
 ## Características
 
-|                             |                                                                                                                                                                                  |
+|                             |                             |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Dos modos**               | **Notarizar DMG** — firma y notariza un archivo `.dmg` existente. **Crear y Notarizar DMG** — crea un archivo DMG a partir de una `.app` con `create-dmg`, y lo firma y notariza |
 | **Arrastrar y soltar**      | Arrastra una `.dmg` o `.app` a la ventana, o usa _Examinar…_ para buscarlo                                                                                                       |
