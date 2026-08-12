@@ -50,7 +50,7 @@ The prerequisite to have `create-dmg` is Node.js 20 or later installed. One way 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-2.- pInstall Node:
+2.- Install Node:
 
 `brew install node`
 
