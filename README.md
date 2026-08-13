@@ -44,17 +44,17 @@ NotarizeDMG, on the other hand, by using `create-dmg` as its DMG creation tool, 
 
 The prerequisite to have `create-dmg` is Node.js 20 or later installed. One way to install Node is through the Homebrew package manager. While this is an extra step compared to installing Node directly from its own installer, it can help you avoid permissions errors and other issues.
 
-1️⃣ Install Homebrew:
+1.- Install Homebrew:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-2️⃣ Install Node:
+2.- Install Node:
 
 `brew install node`
 
-3️⃣ Install create-dmg:
+3.- Install create-dmg:
 
 - Run<br>`npm install --global create-dmg` in Terminal
 - Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
