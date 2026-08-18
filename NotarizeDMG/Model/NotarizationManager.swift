@@ -62,7 +62,7 @@ final class NotarizationManager: ObservableObject {
             appendLog("🟦 ──── Step 1: Building DMG with create-dmg ────\n\n")
             appendLog("Using: \(createDMGPath)\n\n")
 
-            let appName = appURL.deletingPathExtension().lastPathComponent
+            let buildStartDate = Date()
             let buildExit = await shell(createDMGPath, args: [appURL.path, outputFolder.path])
 
             guard buildExit == 0, !isCancelled else {
@@ -74,7 +74,7 @@ final class NotarizationManager: ObservableObject {
                 return
             }
 
-            guard let resultDMG = findResultingDMG(in: outputFolder, appName: appName) else {
+            guard let resultDMG = findResultingDMG(in: outputFolder, createdAfter: buildStartDate) else {
                 appendLog("\n❌ Could not find resulting DMG in: \(outputFolder.path)\n")
                 isRunning = false
                 currentProcess = nil
@@ -105,8 +105,11 @@ final class NotarizationManager: ObservableObject {
         return candidates.first { FileManager.default.isExecutableFile(atPath: $0) }
     }
 
-    /// Scans `folder` for the most-recently-created DMG whose name starts with `appName`.
-    private func findResultingDMG(in folder: URL, appName: String) -> URL? {
+    /// Scans `folder` for the most-recently-created DMG file whose creation date is
+    /// after `date`. Using a pre-build timestamp rather than a name prefix avoids
+    /// issues when create-dmg derives the output name from CFBundleName (which can
+    /// differ from the .app bundle's Finder filename, e.g. hyphens vs spaces).
+    private func findResultingDMG(in folder: URL, createdAfter date: Date) -> URL? {
         guard let files = try? FileManager.default.contentsOfDirectory(
             at: folder,
             includingPropertiesForKeys: [.creationDateKey],
@@ -114,8 +117,9 @@ final class NotarizationManager: ObservableObject {
         ) else { return nil }
 
         let dmgs = files.filter {
-            $0.pathExtension.lowercased() == "dmg" &&
-                $0.lastPathComponent.lowercased().hasPrefix(appName.lowercased())
+            guard $0.pathExtension.lowercased() == "dmg" else { return false }
+            let created = (try? $0.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? .distantPast
+            return created >= date
         }
         return dmgs.sorted { a, b in
             let d1 = (try? a.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? .distantPast
