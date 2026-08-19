@@ -6,7 +6,7 @@
 [![Spanish](https://shields.io/badge/Idioma-Español-green.svg)](README-es.md)
 
   <p align="center">
-     <img width=200 src=Images/AppIcon2.png>
+     <img width=200 src=Images/AppIcon3.png>
   </p>
 
 A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple, all from a single window. It also integrates the `create-dmg` tool (if installed) to build a polished DMG from a `.app` bundle and notarize it in one go.
