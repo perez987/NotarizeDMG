@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1024px; height:1024px; }
+  body {
+    width:1024px; height:1024px;
+    background: transparent;
+    font-family: 'Ubuntu', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Outer tile: dark blue glass, soft rounded corners ===== */
+  .tile {
+    position: relative;
+    width:1024px; height:1024px;
+    border-radius: 232px;
+    /* moderately dark blue base with subtle vertical gradient */
+    background:
+      linear-gradient(180deg,
+        rgba(58,92,150,1) 0%,
+        rgba(34,60,104,1) 42%,
+        rgba(22,40,74,1) 100%),
+      radial-gradient(120% 90% at 50% 12%,
+        rgba(120,160,220,0.45) 0%,
+        rgba(120,160,220,0) 55%);
+    box-shadow:
+      inset 0 6px 2px rgba(255,255,255,0.22),   /* top glass highlight */
+      inset 0 -10px 28px rgba(0,0,0,0.45),     /* bottom inner shade */
+      inset 8px 0 22px rgba(255,255,255,0.06),
+      0 0 0 0 rgba(0,0,0,0);
+    overflow: hidden;
+  }
+  /* frosted sheen overlay across the top */
+  .tile::before {
+    content:"";
+    position:absolute; left:0; right:0; top:0;
+    height:46%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0));
+    -webkit-mask: linear-gradient(180deg,#000 55%, transparent 100%);
+            mask: linear-gradient(180deg,#000 55%, transparent 100%);
+    pointer-events:none;
+  }
+  /* soft vignette */
+  .tile::after {
+    content:"";
+    position:absolute; inset:0;
+    border-radius: 232px;
+    background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.30) 100%);
+    pointer-events:none;
+  }
+
+  /* ===== Central card ===== */
+  .card {
+    position:absolute;
+    /* 75% width = 768px, 50% height = 512px */
+    width:768px; height:512px;
+    left:128px;            /* (1024-768)/2 */
+    top:210px;             /* shifted upward: 512 tall, centered would be 256; lift ~46 */
+    border-radius: 44px;
+    /* white with a faint bluish tint, glass */
+    background:
+      linear-gradient(160deg,
+        rgba(236,243,252,0.96) 0%,
+        rgba(222,233,247,0.92) 45%,
+        rgba(206,219,238,0.90) 100%),
+      linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0));
+    box-shadow:
+      inset 0 4px 1px rgba(255,255,255,0.9),
+      inset 0 -8px 20px rgba(150,175,210,0.30),
+      0 26px 60px rgba(0,0,0,0.45),
+      0 8px 18px rgba(20,40,80,0.35);
+  }
+  /* subtle inner sheen on the card */
+  .card::before {
+    content:"";
+    position:absolute; left:0; right:0; top:0;
+    height:45%;
+    border-radius: 44px 44px 0 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0));
+    -webkit-mask: linear-gradient(180deg,#000 60%, transparent 100%);
+            mask: linear-gradient(180deg,#000 60%, transparent 100%);
+    pointer-events:none;
+  }
+
+  /* ===== Disc drive slot ===== */
+  .slot {
+    position:absolute;
+    left:64px; right:64px;
+    top:120px;
+    height:34px;
+    border-radius: 17px;
+    background: linear-gradient(180deg, #0c1320 0%, #18202e 50%, #0a0f18 100%);
+    box-shadow:
+      inset 0 4px 8px rgba(0,0,0,0.85),
+      inset 0 -2px 4px rgba(120,150,190,0.18),
+      0 1px 0 rgba(255,255,255,0.35);
+  }
+  /* slot inner opening hint */
+  .slot::after {
+    content:"";
+    position:absolute;
+    left:14px; right:14px; top:50%;
+    transform: translateY(-50%);
+    height:6px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  }
+
+  /* ===== DMG label (below the slot, glass blue) ===== */
+  .label {
+    position:absolute;
+    left:0; right:0;
+    top:250px;
+    text-align:center;
+    font-family: 'Ubuntu', sans-serif;
+    font-size:160px;
+    font-weight:700;
+    letter-spacing:12px;
+    /* glass blue fill matching the tile background palette */
+    background: linear-gradient(180deg,
+      rgba(74,102,158,0.97) 0%,
+      rgba(40,66,116,0.97) 48%,
+      rgba(22,40,74,0.97) 100%);
+    -webkit-background-clip:text;
+            background-clip:text;
+    -webkit-text-fill-color:transparent;
+            color:transparent;
+    text-shadow: 0 2px 0 rgba(255,255,255,0.32);
+    filter: drop-shadow(0 5px 10px rgba(20,40,80,0.30));
+    pointer-events:none;
+  }
+
+  /* faint disc reflection above slot to imply a disc inside */
+  .disc-hint {
+    position:absolute;
+    left:160px; width:448px; height:96px;
+    top:18px;
+    border-radius: 48px;
+    background:
+      radial-gradient(120% 200% at 50% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%);
+    opacity:0.5;
+    pointer-events:none;
+  }
+
+  /* ===== OK badge (bottom-right of card) ===== */
+  .badge {
+    position:absolute;
+    right:-46px; bottom:-46px;
+    width:210px; height:210px;
+    border-radius: 50%;
+    background:
+      radial-gradient(120% 120% at 35% 25%,
+        #7df0a0 0%, #36d27a 40%, #1fae5c 72%, #159249 100%);
+    box-shadow:
+      0 0 0 10px rgba(255,255,255,0.95),      /* white ring */
+      0 0 0 14px rgba(255,255,255,0.25),
+      inset 0 8px 16px rgba(255,255,255,0.55),
+      inset 0 -10px 18px rgba(0,80,30,0.45),
+      0 16px 30px rgba(0,0,0,0.40);
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* check mark */
+  .badge svg {
+    width:116px; height:116px;
+    filter: drop-shadow(0 2px 1px rgba(0,80,30,0.35));
+  }
+</style>
+</head>
+<body>
+  <div class="tile">
+    <div class="card">
+      <div class="disc-hint"></div>
+      <div class="slot"></div>
+      <div class="label">DMG</div>
+      <div class="badge">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 52 L43 73 L78 30"
+                stroke="#ffffff" stroke-width="13"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
