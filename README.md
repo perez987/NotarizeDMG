@@ -60,7 +60,7 @@ The prerequisite to have `create-dmg` is Node.js 20 or later installed. One way 
 
 3.- Install create-dmg:
 
-- Run<br>`npm install --global create-dmg` in Terminal
+- Run<br>`npm install --global create-dmg`
 - Optional: If you get a message about<br>`allow-scripts=fs-xattr,macos-alias`<br>run<br>`npm config set allow-scripts=fs-xattr,macos-alias --location=user`
 - `create-dmg` is available in `/usr/local/bin/create-dmg` (Intel Mac) or `/opt/homebrew/bin/create-dmg` (Silicon Mac)
 - As an added benefit, the DMG image is digitally signed if it wasn't signed previously.
