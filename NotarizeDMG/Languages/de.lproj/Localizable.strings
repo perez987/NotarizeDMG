@@ -50,10 +50,10 @@
 "help_step2_body" = "Um create-dmg auf Ihrem System zu haben, folgen Sie diesen Schritten:\n⎯ [Homebrew](https://brew.sh) installieren\n⎯ Node 20+ installieren → `brew install node`\n⎯ create-dmg installieren → `npm install --global create-dmg`\n⎯ Optional → Wenn Sie eine Meldung über\n     `allow-scripts=fs-xattr,macos-alias`\n     erhalten, führen Sie aus\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
 "help_step3_title" = "create-dmg verwenden";
 "help_step3_body" = "⎯ create-dmg ist verfügbar unter\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ Ausführen → `create-dmg <Datei.dmg>`.\n⎯ Das Ergebnis wird in dem Ordner erstellt, aus dem Sie das Terminal ausführen.\n⎯ Außerdem ist das DMG-Image bereits digital signiert.";
-/* create-dmg fehlt */
-"create_dmg_alert_title" = "create-dmg nicht installiert";
-"create_dmg_alert_message" = "create-dmg ist auf diesem System nicht installiert. Es wird benötigt, um DMG-Images zu erstellen. Ohne es können Sie nur vorhandene DMG-Images notarisieren. Klicken Sie auf die Hilfe-Schaltfläche (?), um Installationsanweisungen zu erhalten.";
-"create_dmg_alert_button" = "OK";
-
 "help_workflow_title" = "Was im Hintergrund passiert";
 "help_workflow_body" = "Die App führt drei Befehle der Reihe nach aus:\n⎯ `codesign --sign \"<Identität>\" --timestamp \"<Datei.dmg>\"`\n⎯ `xcrun notarytool submit \"<Datei.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<Datei.dmg>\"`";
+
+/* create-dmg fehlt */
+"create_dmg_alert_title" = "create-dmg nicht installiert";
+"create_dmg_alert_message" = "create-dmg ist auf diesem System nicht installiert. Es wird benötigt, um elegante DMG-Images zu erstellen. Ohne es können Sie nur vorhandene DMG-Images notarisieren. Klicken Sie auf die Hilfe-Schaltfläche (?), um Installationsanweisungen zu erhalten.";
+"create_dmg_alert_button" = "OK";
