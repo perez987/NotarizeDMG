@@ -6,14 +6,16 @@
 <!-- [![Spanish](https://shields.io/badge/Idioma-Español-green.svg)](README-es.md) -->
 
   <p align="center">
-     <img width=200 src=Images/AppIcon1.png>
+     <img width=164 src=Images/AppIcon1.png>
   </p>
 
 A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple, all from a single window. It also integrates the `create-dmg` tool (if installed) to build a polished DMG from a `.app` bundle and notarize it in one go.
 
-|     |
-|:---:|
-| ![Main window](Images/Main-window1.png) |
+<table align="center">
+  <tr>
+  <td align="center"><img width="620" src="Images/Main-window1.png"></td>
+  </tr>
+</table>
 
 ## Features
 
@@ -73,9 +75,24 @@ The created DMG image has an elegant design that I really like and the process i
 - window size adjusted to the background
 - the open disk image icon has the application icon integrated.
 
-|     |
-|:---:|
-| ![DMG window](Images/DMG-window.png) |
+<table align="center">
+  <tr>
+  <td align="center"><img width="580" src="Images/DMG-window.png"></td>
+  </tr>
+</table>
+
+## create-dmg Help
+
+If the app does not detect `create-dmg` on the system, an alert will notify the user, directing them to the help button (?) with installation instructions.
+
+<table align="center">
+  <tr>
+  <td align="center"><img width="360" src="Images/createdmg-alert.png"></td>
+  </tr>
+  <tr>
+  <td align="center"><img width="580" src="Images/createdmg-info.png"></td>
+    </tr>
+</table>
 
 ## Requirements
 

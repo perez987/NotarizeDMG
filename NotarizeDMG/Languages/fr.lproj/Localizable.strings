@@ -55,5 +55,5 @@
 
 /* Alerte : create-dmg absent */
 "create_dmg_alert_title" = "Alerte : create-dmg absent";
-"create_dmg_alert_message" = "Elle est nécessaire pour créer des images DMG de qualité. Sans cela, vous ne pourrez que certifier des images DMG existantes. Cliquez sur le bouton d'aide (?) pour obtenir les instructions d'installation.";
+"create_dmg_alert_message" = "create-dmg est nécessaire pour créer des images DMG de qualité. Sans cela, vous ne pourrez que certifier des images DMG existantes. Cliquez sur le bouton d'aide (?) pour obtenir les instructions d'installation.";
 "create_dmg_alert_button" = "OK";
