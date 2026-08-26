@@ -13,6 +13,7 @@ struct ContentView: View {
     @AppStorage("lastOutputFolderPath") private var lastOutputFolderPath = ""
 
     @State private var mode: AppMode = .build
+    @State private var showCreateDMGAlert = false
     @State private var showFilePicker = false
     @State private var showAppPicker = false
     @State private var showFolderPicker = false
@@ -74,7 +75,18 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView().environmentObject(credentials)
         }
+        .alert(
+            NSLocalizedString("create_dmg_alert_title", comment: "create-dmg missing alert title"),
+            isPresented: $showCreateDMGAlert
+        ) {
+            Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) { }
+        } message: {
+            Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
+        }
         .onAppear {
+            if mode == .build && !manager.isCreateDMGInstalled {
+                showCreateDMGAlert = true
+            }
             guard
                 manager.outputFolder == nil,
                 !lastOutputFolderPath.isEmpty
@@ -87,6 +99,11 @@ struct ContentView: View {
         }
         .onChange(of: manager.outputFolder) { _, newValue in
             lastOutputFolderPath = newValue?.path ?? ""
+        }
+        .onChange(of: mode) { _, newMode in
+            if newMode == .build && !manager.isCreateDMGInstalled {
+                showCreateDMGAlert = true
+            }
         }
     }
 
