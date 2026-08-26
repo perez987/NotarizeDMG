@@ -100,6 +100,10 @@ final class NotarizationManager: ObservableObject {
     // MARK: - Private helpers
 
     /// Returns the path to the `create-dmg` binary, checking both Intel and Apple Silicon locations.
+    var isCreateDMGInstalled: Bool {
+        findCreateDMG() != nil
+    }
+
     private func findCreateDMG() -> String? {
         let candidates = ["/usr/local/bin/create-dmg", "/opt/homebrew/bin/create-dmg"]
         return candidates.first { FileManager.default.isExecutableFile(atPath: $0) }
