@@ -11,3 +11,5 @@ Thumbs.db
 
 *.xcuserstate
 .build/
+
+Images/AppIcon1-html/node_modules
