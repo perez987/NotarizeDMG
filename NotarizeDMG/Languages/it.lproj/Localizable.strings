@@ -57,3 +57,15 @@
 "create_dmg_alert_title" = "Avviso: create-dmg assente";
 "create_dmg_alert_message" = "create-dmg non è installato su questo sistema. È necessario per creare immagini DMG di qualità. Senza di esso, sarà possibile solo certificare immagini DMG esistenti. Fare clic sul pulsante Guida (?) per le istruzioni di installazione.";
 "create_dmg_alert_button" = "OK";
+
+/* Update Check */
+"Check for Updates…" = "Verifica aggiornamenti…";
+"UpdateAvailable" = "Aggiornamento disponibile";
+"UpdateAvailableInfo" = "NotarizeDMG %@ è ora disponibile. Vuoi scaricarlo?";
+"DownloadUpdate" = "Scarica aggiornamento";
+"UpdateLater" = "Più tardi";
+"UpToDate" = "Sei aggiornato!";
+"UpToDateInfo" = "NotarizeDMG %@ è la versione più recente.";
+"UpdateCheckError" = "Verifica aggiornamenti non riuscita";
+"UpdateCheckFailed" = "Impossibile recuperare le informazioni sull'aggiornamento.";
+"UpdateCheckNetworkError" = "Impossibile connettersi al server degli aggiornamenti. Controlla la tua connessione a Internet.";

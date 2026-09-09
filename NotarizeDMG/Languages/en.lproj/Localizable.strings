@@ -57,3 +57,15 @@
 "create_dmg_alert_title" = "create-dmg Not Installed";
 "create_dmg_alert_message" = "create-dmg is not installed on this system. It is required to build fancy DMG images. Without it, you can only notarize existing DMG images. Click the Help (?) button for installation instructions.";
 "create_dmg_alert_button" = "OK";
+
+/* Update Check */
+"Check for Updates…" = "Check for Updates…";
+"UpdateAvailable" = "Update Available";
+"UpdateAvailableInfo" = "NotarizeDMG %@ is now available. Would you like to download it?";
+"DownloadUpdate" = "Download Update";
+"UpdateLater" = "Later";
+"UpToDate" = "You're up to date!";
+"UpToDateInfo" = "NotarizeDMG %@ is currently the latest version.";
+"UpdateCheckError" = "Update Check Failed";
+"UpdateCheckFailed" = "Failed to retrieve update information.";
+"UpdateCheckNetworkError" = "Unable to connect to the update server. Please check your internet connection.";

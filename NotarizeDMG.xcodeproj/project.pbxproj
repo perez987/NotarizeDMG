@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B43A0B8C2BDE000000000001 /* NotarizeDMGApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43A0B832BDE000000000001 /* NotarizeDMGApp.swift */; };
 		B43A0B932BDE000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B43A0B8A2BDE000000000001 /* Assets.xcassets */; };
+		D98635B73051220D005AD8E5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D98635B63051220D005AD8E5 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,9 +17,11 @@
 		B43A0B832BDE000000000001 /* NotarizeDMGApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotarizeDMGApp.swift; sourceTree = "<group>"; };
 		B43A0B8A2BDE000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B43A0B8B2BDE000000000001 /* NotarizeDMG.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotarizeDMG.entitlements; sourceTree = "<group>"; };
+		D98635B63051220D005AD8E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		D98635BC3051232B005AD8E5 /* Updater */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Updater; sourceTree = "<group>"; };
 		D9D83F32300ADC7A0031E351 /* Languages */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Languages; sourceTree = "<group>"; };
 		D9D83F33300ADCB20031E351 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
 		D9D83F34300ADCCA0031E351 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
@@ -55,10 +58,12 @@
 			isa = PBXGroup;
 			children = (
 				B43A0B8A2BDE000000000001 /* Assets.xcassets */,
+				D98635B63051220D005AD8E5 /* Info.plist */,
 				D9D83F32300ADC7A0031E351 /* Languages */,
 				D9D83F33300ADCB20031E351 /* Model */,
 				B43A0B8B2BDE000000000001 /* NotarizeDMG.entitlements */,
 				B43A0B832BDE000000000001 /* NotarizeDMGApp.swift */,
+				D98635BC3051232B005AD8E5 /* Updater */,
 				D9D83F34300ADCCA0031E351 /* Views */,
 			);
 			path = NotarizeDMG;
@@ -80,6 +85,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				D98635BC3051232B005AD8E5 /* Updater */,
 				D9D83F32300ADC7A0031E351 /* Languages */,
 				D9D83F33300ADCB20031E351 /* Model */,
 				D9D83F34300ADCCA0031E351 /* Views */,
@@ -132,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B43A0B932BDE000000000001 /* Assets.xcassets in Resources */,
+				D98635B73051220D005AD8E5 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,7 +165,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotarizeDMG/NotarizeDMG.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 0009;
 				DEVELOPMENT_TEAM = ER43ZD2S4U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -201,7 +208,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotarizeDMG/NotarizeDMG.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 0009;
 				DEVELOPMENT_TEAM = ER43ZD2S4U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;

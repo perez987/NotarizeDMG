@@ -28,7 +28,21 @@ struct NotarizeDMGApp: App {
             SettingsView()
                 .environmentObject(credentials)
         }
+        
         .commands {
+            CommandGroup(after: .appInfo) {
+                // Settings to check for updates
+                Button(
+                    NSLocalizedString(
+                        "Check for Updates…",
+                        comment: "Menu item to check for app updates"
+                    ),
+                       systemImage: "arrow.down"
+                ){
+                    GitHubUpdateChecker.shared.checkForUpdates(userInitiated: true)
+                }
+                .keyboardShortcut("u", modifiers: [.command])
+            }
             CommandMenu(NSLocalizedString("menu_language", comment: "Language menu")) {
                 Button(NSLocalizedString("menu_select_language", comment: "Select language menu item")) {
                     isLanguageSelectorPresented = true
@@ -38,3 +52,4 @@ struct NotarizeDMGApp: App {
         }
     }
 }
+
