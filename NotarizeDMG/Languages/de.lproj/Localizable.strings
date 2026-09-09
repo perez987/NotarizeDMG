@@ -43,6 +43,7 @@
 
 /* Hilfe */
 "notarizeDMG_help" = "Ergänzende Hilfe zu NotarizeDMG";
+"help_button_tooltip" = "So installieren und verwenden Sie create-dmg";
 "help_title" = "Erweiterung: create-dmg";
 "help_step1_title" = "Was ist create-dmg?";
 "help_step1_body" = "NotarizeDMG benötigt ein DMG-Image einer digital signierten macOS-Anwendung. Es gibt ein Tool, [create-dmg](https://github.com/sindresorhus/create-dmg), das DMG-Images von macOS-Anwendungen mit einem eleganten und polierten Fensterdesign erstellt.";

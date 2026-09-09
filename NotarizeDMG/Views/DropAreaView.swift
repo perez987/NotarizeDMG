@@ -17,29 +17,50 @@ struct DropAreaView: View {
         mode == .notarize ? "drop_dmg_here" : "drop_app_here"
     }
 
+    private var iconName: String {
+        mode == .notarize ? "externaldrive.badge.checkmark" : "shippingbox.fill"
+    }
+
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isTargeted
-                    ? Color.accentColor.opacity(0.08)
-                    : Color.secondary.opacity(0.05))
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(AppTheme.surfaceGradient)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .fill(AppTheme.accentGlow)
+                        .opacity(isTargeted ? 0.95 : 0.45)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .strokeBorder(
+                            isTargeted ? AppTheme.accentGradient : AppTheme.borderGradient,
+                            style: StrokeStyle(lineWidth: isTargeted ? 2 : 1.5, dash: [10, 6])
+                        )
+                }
+                .shadow(color: AppTheme.shadowColor, radius: 20, x: 0, y: 14)
 
-            RoundedRectangle(cornerRadius: 12)
-                .strokeBorder(
-                    isTargeted ? Color.accentColor : Color.secondary.opacity(0.4),
-                    style: StrokeStyle(lineWidth: 2, dash: [8, 4])
-                )
-
-            VStack(spacing: 10) {
-                Image(systemName: "arrow.down.circle.dotted")
-                    .font(.system(size: 44))
-                    .foregroundStyle(isTargeted ? AnyShapeStyle(Color.accentColor)
-                        : AnyShapeStyle(Color.secondary))
+            VStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.accentGradient)
+                        .opacity(isTargeted ? 0.9 : 0.72)
+                        .frame(width: 68, height: 68)
+                    Circle()
+                        .fill(.white.opacity(0.28))
+                        .frame(width: 52, height: 52)
+                    Image(systemName: iconName)
+                        .font(.system(size: 28, weight: .semibold))
+                        .foregroundStyle(AppTheme.accentGradient)
+                }
 
                 if let url = fileURL {
-                    VStack(spacing: 2) {
+                    VStack(spacing: 4) {
                         Text(url.lastPathComponent)
-                            .font(.headline)
+                            .font(.headline.weight(.semibold))
                         Text(url.deletingLastPathComponent().path)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -48,17 +69,21 @@ struct DropAreaView: View {
                     }
                 } else {
                     Text(NSLocalizedString(placeholderKey, comment: "Drop placeholder"))
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
+                        .font(.headline.weight(.medium))
+                        .foregroundStyle(.primary.opacity(0.82))
                 }
 
                 Button(NSLocalizedString("browse", comment: "Browse button"), action: onBrowse)
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .tint(.white.opacity(0.28))
+                    .foregroundStyle(.primary)
             }
-            .padding()
+            .padding(24)
         }
-        .frame(height: 160)
-        .onDrop(of: [.fileURL], isTargeted: $isTargeted, perform: handleDrop)
+        .frame(height: 188)
+        .animation(.spring(response: 0.28, dampingFraction: 0.86), value: isTargeted)
+        .animation(.spring(response: 0.28, dampingFraction: 0.86), value: fileURL)
+        .onDrop(of: [acceptedType, .fileURL], isTargeted: $isTargeted, perform: handleDrop)
     }
 
     private func handleDrop(_ providers: [NSItemProvider]) -> Bool {

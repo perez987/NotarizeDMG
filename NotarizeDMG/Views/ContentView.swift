@@ -21,32 +21,45 @@ struct ContentView: View {
     @State private var isDropTargeted = false
 
     var body: some View {
-        VStack(spacing: 16) {
-            modePicker
+        ZStack {
+            AppTheme.windowGradient
+                .ignoresSafeArea()
 
-            if mode == .notarize {
-                DropAreaView(
-                    fileURL: $manager.dmgURL,
-                    isTargeted: $isDropTargeted,
-                    mode: .notarize,
-                    onBrowse: { showFilePicker = true }
-                )
-            } else {
-                DropAreaView(
-                    fileURL: $manager.appURL,
-                    isTargeted: $isDropTargeted,
-                    mode: .build,
-                    onBrowse: { showAppPicker = true }
-                )
-                outputFolderRow
+            VStack(spacing: 18) {
+                modePicker
+
+                if mode == .notarize {
+                    DropAreaView(
+                        fileURL: $manager.dmgURL,
+                        isTargeted: $isDropTargeted,
+                        mode: .notarize,
+                        onBrowse: { showFilePicker = true }
+                    )
+                } else {
+                    DropAreaView(
+                        fileURL: $manager.appURL,
+                        isTargeted: $isDropTargeted,
+                        mode: .build,
+                        onBrowse: { showAppPicker = true }
+                    )
+                    outputFolderRow
+                }
+
+                controlsRow
+
+                logBox
             }
+            .padding(.horizontal, 22)
+            .padding(.top, 22)
+            .padding(.bottom, 30)
 
-            controlsRow
-
-            logBox
+            if showCreateDMGAlert {
+                createDMGAlertOverlay
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                    .zIndex(1)
+            }
         }
-        .padding()
-        .frame(minWidth: 620, idealWidth: 620, maxWidth: 620,
+        .frame(minWidth: 660, idealWidth: 660, maxWidth: 660,
                minHeight: windowHeight, idealHeight: windowHeight, maxHeight: windowHeight,
                alignment: .top)
         .fileImporter(
@@ -75,14 +88,6 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView().environmentObject(credentials)
         }
-        .alert(
-            NSLocalizedString("create_dmg_alert_title", comment: "create-dmg missing alert title"),
-            isPresented: $showCreateDMGAlert
-        ) {
-            Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) {}
-        } message: {
-            Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
-        }
         .onAppear {
             if mode == .build && !manager.isCreateDMGInstalled {
                 showCreateDMGAlert = true
@@ -110,22 +115,47 @@ struct ContentView: View {
     // MARK: - Subviews
 
     private var windowHeight: CGFloat {
-        mode == .build ? 580 : 520
+        mode == .build ? 700 : 640
     }
 
     private var modePicker: some View {
-        Picker("", selection: $mode) {
-            Text(NSLocalizedString("mode_notarize", comment: "Notarize mode label")).tag(AppMode.notarize)
-            Text(NSLocalizedString("mode_build", comment: "Build & Notarize mode label")).tag(AppMode.build)
+        VStack(alignment: .leading, spacing: 12) {
+            Picker("", selection: $mode) {
+                Text(NSLocalizedString("mode_build", comment: "Build & Notarize mode label")).tag(AppMode.build)
+                Text(NSLocalizedString("mode_notarize", comment: "Notarize mode label")).tag(AppMode.notarize)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .padding(6)
+            .background {
+                Capsule(style: .continuous)
+                    .fill(.thinMaterial)
+                    .overlay {
+                        Capsule(style: .continuous)
+                            .fill(AppTheme.accentGlow)
+                            .opacity(0.55)
+                    }
+                    .overlay {
+                        Capsule(style: .continuous)
+                            .strokeBorder(AppTheme.borderGradient, lineWidth: 1)
+                    }
+            }
         }
-        .pickerStyle(.segmented)
-        .labelsHidden()
+        .padding(16)
+        .glassCard(cornerRadius: 26, accentOpacity: 0.3)
     }
 
     private var outputFolderRow: some View {
         HStack(spacing: 8) {
-            Image(systemName: "folder")
-                .foregroundStyle(.secondary)
+            ZStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(AppTheme.accentGradient)
+                    .opacity(0.2)
+                    .frame(width: 42, height: 42)
+                Image(systemName: "folder.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(AppTheme.accentGradient)
+            }
             if let folder = manager.outputFolder {
                 Text(folder.path)
                     .font(.body)
@@ -142,32 +172,45 @@ struct ContentView: View {
             Button(NSLocalizedString("choose_folder", comment: "Choose folder button")) {
                 showFolderPicker = true
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.borderedProminent)
+            .tint(.white.opacity(0.24))
+            .foregroundStyle(.primary)
             .controlSize(.regular)
         }
-        .padding(.horizontal, 4)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .glassCard(cornerRadius: 24, accentOpacity: 0.18)
     }
 
     private var controlsRow: some View {
         HStack(spacing: 12) {
-            Spacer()
             if !credentials.isValid {
                 Label(NSLocalizedString("configure_credentials_in_settings", comment: "Missing credentials warning"),
                       systemImage: "exclamationmark.triangle.fill")
-                    .font(.body)
-                    .foregroundStyle(.blue)
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(.orange)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(.white.opacity(0.35), in: Capsule(style: .continuous))
             }
             Spacer()
             Button(NSLocalizedString("settings", comment: "Settings button")) { showSettings = true }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
             mainActionButton
             Button {
                 openWindow(id: "help")
             } label: {
                 Image(systemName: "questionmark.circle")
-                    .font(.system(size: 22))
+                    .font(.system(size: 20, weight: .semibold))
             }
-            .help(NSLocalizedString("notarizeDMG_help", comment: "Help button tooltip"))
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            .help(NSLocalizedString("help_button_tooltip", comment: "Help button tooltip"))
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .glassCard(cornerRadius: 24, accentOpacity: 0.2)
     }
 
     private var mainActionButton: some View {
@@ -196,43 +239,95 @@ struct ContentView: View {
             }
         }
         .buttonStyle(.borderedProminent)
-        .tint(isRunning ? .red : .accentColor)
+        .tint(isRunning ? .red : .accentColor.opacity(0.92))
+        .controlSize(.large)
         .disabled(isDisabled)
     }
 
+    private var createDMGAlertOverlay: some View {
+        ZStack {
+            Rectangle()
+                .fill(.black.opacity(0.18))
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .fill(AppTheme.accentGradient)
+                        .opacity(0.22)
+                        .frame(width: 52, height: 52)
+
+                    Image(systemName: "shippingbox.circle.fill")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundStyle(AppTheme.accentGradient)
+                }
+
+                Text(NSLocalizedString("create_dmg_alert_title", comment: "create-dmg missing alert title"))
+                    .font(.title3.weight(.semibold))
+                    .multilineTextAlignment(.center)
+
+                Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) {
+                    showCreateDMGAlert = false
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .keyboardShortcut(.defaultAction)
+            }
+            .padding(24)
+            .frame(width: 420)
+            .glassCard(cornerRadius: 30, accentOpacity: 0.24)
+            .shadow(color: AppTheme.shadowColor, radius: 26, x: 0, y: 18)
+        }
+    }
+
     private var logBox: some View {
-        GroupBox {
+        VStack(spacing: 0) {
+            HStack {
+                Label("Log", systemImage: "waveform.path.ecg.rectangle")
+                    .font(.system(.body, weight: .semibold))
+                Spacer()
+                Button("copy") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(manager.log, forType: .string)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .disabled(manager.log.isEmpty)
+                Button("clear") { manager.log = "" }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .disabled(manager.log.isEmpty)
+            }
+            .padding(.horizontal, 18)
+            .padding(.vertical, 14)
+
+            Divider()
+                .overlay(.white.opacity(0.32))
+
             ScrollViewReader { proxy in
                 ScrollView {
                     Text(manager.log.isEmpty ? NSLocalizedString("ready", comment: "Log ready") : manager.log)
-                        .font(.system(.body))
+                        .font(.system(.body, design: .monospaced))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(4)
+                        .padding(16)
+                        .textSelection(.enabled)
                         .id("logBottom")
                 }
+                .background(Color.white.opacity(0.12))
                 .onChange(of: manager.log) {
                     withAnimation(.easeOut(duration: 0.1)) {
                         proxy.scrollTo("logBottom", anchor: .bottom)
                     }
                 }
             }
-            .frame(minHeight: 200, maxHeight: .infinity)
-        } label: {
-            VStack {
-                HStack {
-                    Label("Log", systemImage: "doc.text.magnifyingglass")
-                        .font(.system(.body))
-                    Spacer()
-                    Button("copy") {
-                        NSPasteboard.general.clearContents()
-                        NSPasteboard.general.setString(manager.log, forType: .string)
-                    }
-                    .disabled(manager.log.isEmpty)
-                    Button("clear") { manager.log = "" }
-                        .disabled(manager.log.isEmpty)
-                }
-                Spacer()
-            }
+//            .frame(minHeight: 200, maxHeight: .infinity)
         }
+        .glassCard(cornerRadius: 28, accentOpacity: 0.16)
     }
 }

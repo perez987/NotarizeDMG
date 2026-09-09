@@ -22,7 +22,7 @@
 /* Settings */
 "signing_identity" = "Identity\n";
 "signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
-"code_signing" = "Code Signing";
+"code_signing" = "Code Signing\n";
 "apple_developer_account" = "Apple Developer Account\n";
 "apple_id" = "Apple ID";
 "apple_email_placeholder" = "";
@@ -43,6 +43,7 @@
 
 /* Help */
 "notarizeDMG_help" = "NotarizeDMG Supplementary Help";
+"help_button_tooltip" = "How to install and use create-dmg";
 "help_title" = "Add-on: create-dmg";
 "help_step1_title" = "What is create-dmg?";
 "help_step1_body" = "NotarizeDMG requires a DMG image of a digitally signed macOS application. There is a tool, [create-dmg](https://github.com/sindresorhus/create-dmg), that creates DMG images of macOS applications with an elegant and polished window design.";

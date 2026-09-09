@@ -5,75 +5,111 @@ struct HelpView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(spacing: 0) {
-            Text(NSLocalizedString("help_title", comment: "Help window title"))
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.top)
+        ZStack {
+            AppTheme.windowGradient
+                .ignoresSafeArea()
 
-            Spacer()
+            VStack(spacing: 18) {
+                headerCard
 
-//            Divider()
-//                .padding(.top, 8)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    helpSection(
-                        icon: "1.circle.fill",
-                        title: NSLocalizedString("help_step1_title", comment: "Help step 1 title"),
-                        body: NSLocalizedString("help_step1_body", comment: "Help step 1 body")
-                    )
-                    helpSection(
-                        icon: "2.circle.fill",
-                        title: NSLocalizedString("help_step2_title", comment: "Help step 2 title"),
-                        body: NSLocalizedString("help_step2_body", comment: "Help step 2 body")
-                    )
-                    helpSection(
-                        icon: "3.circle.fill",
-                        title: NSLocalizedString("help_step3_title", comment: "Help step 3 title"),
-                        body: NSLocalizedString("help_step3_body", comment: "Help step 3 body")
-                    )
-//                    helpSection(
-//                        icon: "4.circle.fill",
-//                        title: NSLocalizedString("help_workflow_title", comment: "Help workflow title"),
-//                        body: NSLocalizedString("help_workflow_body", comment: "Help workflow body")
-//                    )
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 14) {
+                        helpSection(
+                            icon: "1.circle.fill",
+                            title: NSLocalizedString("help_step1_title", comment: "Help step 1 title"),
+                            body: NSLocalizedString("help_step1_body", comment: "Help step 1 body")
+                        )
+                        helpSection(
+                            icon: "2.circle.fill",
+                            title: NSLocalizedString("help_step2_title", comment: "Help step 2 title"),
+                            body: NSLocalizedString("help_step2_body", comment: "Help step 2 body")
+                        )
+                        helpSection(
+                            icon: "3.circle.fill",
+                            title: NSLocalizedString("help_step3_title", comment: "Help step 3 title"),
+                            body: NSLocalizedString("help_step3_body", comment: "Help step 3 body")
+                        )
+                    }
+                    .padding(18)
+                    .textSelection(.enabled)
                 }
-                .padding()
-                .textSelection(.enabled)
-            }
+                .scrollIndicators(.hidden)
+                .glassCard(cornerRadius: 28, accentOpacity: 0.18)
 
-            Divider()
-
-            HStack {
-                Spacer()
-                Button(NSLocalizedString("ok", comment: "OK button")) { dismiss() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
+                HStack {
+                    Spacer()
+                    Button(NSLocalizedString("ok", comment: "OK button")) { dismiss() }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                        .keyboardShortcut(.defaultAction)
+                }
+                .padding(18)
+                .glassCard(cornerRadius: 24, accentOpacity: 0.16)
             }
-            .padding()
+            .padding(20)
         }
-        .frame(width: 560, height: 496)
+        .frame(width: 620, height: 560)
         .environment(\.openURL, OpenURLAction { url in
             NSWorkspace.shared.open(url)
             return .handled
         })
     }
 
-    private func helpSection(icon _: String, title: String, body: String) -> some View {
+    private var headerCard: some View {
+        HStack(spacing: 14) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(AppTheme.accentGradient)
+                    .opacity(0.2)
+                    .frame(width: 50, height: 50)
+                Image(systemName: "questionmark.circle.fill")
+                    .font(.system(size: 21, weight: .semibold))
+                    .foregroundStyle(AppTheme.accentGradient)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(NSLocalizedString("help_title", comment: "Help window title"))
+                    .font(.title2.weight(.semibold))
+                Text(NSLocalizedString("notarizeDMG_help", comment: "Help window title"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(18)
+        .glassCard(cornerRadius: 26, accentOpacity: 0.28)
+    }
+
+    private func helpSection(icon: String, title: String, body: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
-//            Image(systemName: icon)
-//                .font(.system(size: 22)) // explicit size avoids CoreUI scaleFactor==0 warnings
-//                .foregroundStyle(.primary)
-//                .frame(width: 28)
+            Image(systemName: icon)
+                .font(.system(size: 22))
+                .foregroundStyle(AppTheme.accentGradient)
+                .frame(width: 28, alignment: .center)
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.headline)
+                    .font(.headline.weight(.semibold))
                 markdownText(body)
                     .font(.callout)
                     .foregroundStyle(.primary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.white.opacity(0.2))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .fill(AppTheme.accentGlow)
+                        .opacity(0.16)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .strokeBorder(AppTheme.borderGradient, lineWidth: 1)
+                }
         }
     }
 
