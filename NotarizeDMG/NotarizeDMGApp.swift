@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 @main
@@ -6,6 +7,7 @@ struct NotarizeDMGApp: App {
         static let help = "help"
     }
 
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var credentials = CredentialsManager.shared
     @State private var isLanguageSelectorPresented = false
 
@@ -31,7 +33,6 @@ struct NotarizeDMGApp: App {
         
         .commands {
             CommandGroup(after: .appInfo) {
-                // Settings to check for updates
                 Button(
                     NSLocalizedString(
                         "Check for Updates…",
@@ -51,5 +52,43 @@ struct NotarizeDMGApp: App {
             }
         }
     }
-}
 
+    final class AppDelegate: NSObject, NSApplicationDelegate {
+        func applicationDidFinishLaunching(_ notification: Notification) {
+            DispatchQueue.main.async {
+                self.applyUpdateMenuItemImage()
+            }
+        }
+
+        private func applyUpdateMenuItemImage() {
+            let title = NSLocalizedString("Check for Updates…", comment: "Menu item to check for app updates")
+            guard
+                let mainMenu = NSApp.mainMenu,
+                let menuItem = findMenuItem(withTitle: title, in: mainMenu.items),
+                let image = NSImage(
+                    systemSymbolName: "arrow.down",
+                    accessibilityDescription: title
+                )
+            else {
+                return
+            }
+
+            image.isTemplate = true
+            menuItem.image = image
+        }
+
+        private func findMenuItem(withTitle title: String, in items: [NSMenuItem]) -> NSMenuItem? {
+            for item in items {
+                if item.title == title {
+                    return item
+                }
+
+                if let submenu = item.submenu, let match = findMenuItem(withTitle: title, in: submenu.items) {
+                    return match
+                }
+            }
+
+            return nil
+        }
+    }
+}
