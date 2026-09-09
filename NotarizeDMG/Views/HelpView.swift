@@ -10,7 +10,7 @@ struct HelpView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
                 .padding(.top)
-            
+
             Spacer()
 
 //            Divider()
@@ -60,7 +60,7 @@ struct HelpView: View {
         })
     }
 
-    private func helpSection(icon: String, title: String, body: String) -> some View {
+    private func helpSection(icon _: String, title: String, body: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
 //            Image(systemName: icon)
 //                .font(.system(size: 22)) // explicit size avoids CoreUI scaleFactor==0 warnings
@@ -80,7 +80,8 @@ struct HelpView: View {
     private func markdownText(_ string: String) -> Text {
         if let attributed = try? AttributedString(markdown: string,
                                                   options: AttributedString.MarkdownParsingOptions(
-                                                      interpretedSyntax: .inlineOnlyPreservingWhitespace))
+                                                      interpretedSyntax: .inlineOnlyPreservingWhitespace
+                                                  ))
         {
             return Text(attributed)
         }

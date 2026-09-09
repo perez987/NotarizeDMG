@@ -79,7 +79,7 @@ struct ContentView: View {
             NSLocalizedString("create_dmg_alert_title", comment: "create-dmg missing alert title"),
             isPresented: $showCreateDMGAlert
         ) {
-            Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) { }
+            Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) {}
         } message: {
             Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
         }
@@ -109,7 +109,9 @@ struct ContentView: View {
 
     // MARK: - Subviews
 
-    private var windowHeight: CGFloat { mode == .build ? 580 : 520 }
+    private var windowHeight: CGFloat {
+        mode == .build ? 580 : 520
+    }
 
     private var modePicker: some View {
         Picker("", selection: $mode) {

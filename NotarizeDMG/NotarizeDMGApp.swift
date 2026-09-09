@@ -28,7 +28,7 @@ struct NotarizeDMGApp: App {
             SettingsView()
                 .environmentObject(credentials)
         }
-        
+
         .commands {
             CommandGroup(after: .appInfo) {
                 // Settings to check for updates
@@ -36,9 +36,8 @@ struct NotarizeDMGApp: App {
                     NSLocalizedString(
                         "Check for Updates…",
                         comment: "Menu item to check for app updates"
-                    ),
-                       systemImage: "arrow.down"
-                ){
+                    )
+                ) {
                     GitHubUpdateChecker.shared.checkForUpdates(userInitiated: true)
                 }
                 .keyboardShortcut("u", modifiers: [.command])
@@ -52,4 +51,3 @@ struct NotarizeDMGApp: App {
         }
     }
 }
-

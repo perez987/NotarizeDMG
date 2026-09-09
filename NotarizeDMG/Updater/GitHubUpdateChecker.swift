@@ -32,8 +32,8 @@ final class GitHubUpdateChecker {
 
     // MARK: - Public API
 
-    // Checks for updates and shows an alert if a newer version is found (or if the user initiated
-    // the check and is already up to date).
+    /// Checks for updates and shows an alert if a newer version is found (or if the user initiated
+    /// the check and is already up to date).
     func checkForUpdates(userInitiated: Bool) {
         let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
         fetchLatestRelease(currentVersion: currentVersion, userInitiated: userInitiated)
@@ -41,7 +41,7 @@ final class GitHubUpdateChecker {
 
     // MARK: - Private helpers
 
-    // Fetches /releases/latest and compares with the current version.
+    /// Fetches /releases/latest and compares with the current version.
     private func fetchLatestRelease(currentVersion: String, userInitiated: Bool) {
         guard let url = URL(string: latestReleaseAPIURL) else { return }
         performRequest(url: url, userInitiated: userInitiated) { [weak self] json in
@@ -61,7 +61,7 @@ final class GitHubUpdateChecker {
         }
     }
 
-    // Finds the newest non-prerelease, non-draft release tag starting with the given major prefix.
+    /// Finds the newest non-prerelease, non-draft release tag starting with the given major prefix.
     private func findBestRelease(from releases: [[String: Any]], withPrefix prefix: String) -> String? {
         var bestVersion: String?
         for release in releases {
@@ -77,8 +77,8 @@ final class GitHubUpdateChecker {
         return bestVersion
     }
 
-    // Common HTTP GET helper that calls back on the main queue with a parsed JSON dictionary.
-    // For the /releases endpoint (array response) the dictionary uses the key "_array".
+    /// Common HTTP GET helper that calls back on the main queue with a parsed JSON dictionary.
+    /// For the /releases endpoint (array response) the dictionary uses the key "_array".
     private func performRequest(url: URL, userInitiated: Bool, completion: @escaping ([String: Any]) -> Void) {
         var request = URLRequest(url: url)
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
@@ -111,8 +111,8 @@ final class GitHubUpdateChecker {
         task.resume()
     }
 
-    // Parses a JSON response data buffer and calls completion with the resulting dictionary.
-    // Array responses are wrapped under the "_array" key.
+    /// Parses a JSON response data buffer and calls completion with the resulting dictionary.
+    /// Array responses are wrapped under the "_array" key.
     private func parseJSONResponse(_ data: Data, userInitiated: Bool, completion: ([String: Any]) -> Void) {
         do {
             let json = try JSONSerialization.jsonObject(with: data)
@@ -132,12 +132,12 @@ final class GitHubUpdateChecker {
 
     // MARK: - Version comparison
 
-    // Strips a leading "v" from a tag name (e.g. "v3.0.2" → "3.0.2").
+    /// Strips a leading "v" from a tag name (e.g. "v3.0.2" → "3.0.2").
     private func normalizedVersion(_ tag: String) -> String {
         tag.hasPrefix("v") ? String(tag.dropFirst()) : tag
     }
 
-    // Returns true when `newVersion` is strictly newer than `currentVersion` (component-by-component).
+    /// Returns true when `newVersion` is strictly newer than `currentVersion` (component-by-component).
     private func isVersion(_ newVersion: String, newerThan currentVersion: String) -> Bool {
         let newParts = newVersion.components(separatedBy: ".").compactMap { Int($0) }
         let curParts = currentVersion.components(separatedBy: ".").compactMap { Int($0) }
