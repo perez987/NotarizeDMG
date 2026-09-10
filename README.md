@@ -13,7 +13,7 @@ A macOS SwiftUI utility that notarizes a signed or unsigned DMG image with Apple
 
 <table align="center">
   <tr>
-  <td align="center"><img width="620" src="Images/Main-window1.png"></td>
+  <td align="center"><img width="620" src="Images/Main-window.png"></td>
   </tr>
 </table>
 

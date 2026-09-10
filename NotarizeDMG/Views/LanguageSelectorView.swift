@@ -15,6 +15,7 @@ struct LanguageItem: Identifiable {
 }
 
 struct LanguageSelectorView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @State private var selectedLanguage: String
     @State private var showRestartAlert = false
@@ -43,7 +44,7 @@ struct LanguageSelectorView: View {
 
     var body: some View {
         ZStack {
-            AppTheme.windowGradient
+            AppTheme.windowGradient(for: colorScheme)
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
@@ -56,7 +57,7 @@ struct LanguageSelectorView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(18)
-                .glassCard(cornerRadius: 26, accentOpacity: 0.28)
+                .glassCard(colorScheme: colorScheme, cornerRadius: 26, accentOpacity: 0.28)
 
                 VStack(spacing: 12) {
                     ForEach(languages) { language in
@@ -86,16 +87,21 @@ struct LanguageSelectorView: View {
                             .frame(maxWidth: .infinity)
                             .background {
                                 RoundedRectangle(cornerRadius: 22, style: .continuous)
-                                    .fill(.white.opacity(selectedLanguage == language.code ? 0.34 : 0.18))
+                                    .fill(
+                                        AppTheme.raisedSurfaceFill(
+                                            for: colorScheme,
+                                            emphasized: selectedLanguage == language.code
+                                        )
+                                    )
                                     .overlay {
                                         RoundedRectangle(cornerRadius: 22, style: .continuous)
-                                            .fill(AppTheme.accentGlow)
-                                            .opacity(selectedLanguage == language.code ? 0.92 : 0.16)
+                                            .fill(AppTheme.accentGlow(for: colorScheme))
+                                            .opacity(selectedLanguage == language.code ? (colorScheme == .dark ? 0.42 : 0.92) : (colorScheme == .dark ? 0.08 : 0.16))
                                     }
                                     .overlay {
                                         RoundedRectangle(cornerRadius: 22, style: .continuous)
                                             .strokeBorder(
-                                                selectedLanguage == language.code ? AppTheme.accentGradient : AppTheme.borderGradient,
+                                                selectedLanguage == language.code ? AppTheme.accentGradient : AppTheme.borderGradient(for: colorScheme),
                                                 lineWidth: selectedLanguage == language.code ? 1.6 : 1
                                             )
                                     }
@@ -105,7 +111,7 @@ struct LanguageSelectorView: View {
                     }
                 }
                 .padding(18)
-                .glassCard(cornerRadius: 28, accentOpacity: 0.18)
+                .glassCard(colorScheme: colorScheme, cornerRadius: 28, accentOpacity: 0.18)
 
                 HStack(spacing: 12) {
                     Button(NSLocalizedString("cancel", comment: "Cancel button")) {
@@ -130,7 +136,7 @@ struct LanguageSelectorView: View {
                     .keyboardShortcut(.defaultAction)
                 }
                 .padding(18)
-                .glassCard(cornerRadius: 24, accentOpacity: 0.16)
+                .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.16)
             }
             .padding(20)
         }
@@ -155,3 +161,4 @@ struct LanguageSelectorView: View {
 #Preview {
     LanguageSelectorView()
 }
+

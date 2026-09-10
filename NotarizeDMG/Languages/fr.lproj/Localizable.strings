@@ -20,10 +20,10 @@
 "help" = "Aide";
 
 /* Réglages */
-"signing_identity" = "Identité\n";
+"signing_identity" = "Identité";
 "signing_identity_example" = "Developer ID Application: Nom (xxxxxxxxxx)";
 "code_signing" = "Signature du code";
-"apple_developer_account" = "Compte Développeur Apple\n";
+"apple_developer_account" = "Compte Développeur Apple";
 "apple_id" = "Apple ID";
 "apple_email_placeholder" = "";
 "team_id" = "Team ID";

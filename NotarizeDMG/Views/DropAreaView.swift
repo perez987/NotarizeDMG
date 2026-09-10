@@ -2,6 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct DropAreaView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Binding var fileURL: URL?
     @Binding var isTargeted: Bool
     var mode: AppMode
@@ -27,21 +28,21 @@ struct DropAreaView: View {
                 .fill(.ultraThinMaterial)
                 .overlay {
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(AppTheme.surfaceGradient)
+                        .fill(AppTheme.surfaceGradient(for: colorScheme))
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .fill(AppTheme.accentGlow)
-                        .opacity(isTargeted ? 0.95 : 0.45)
+                        .fill(AppTheme.accentGlow(for: colorScheme))
+                        .opacity(isTargeted ? (colorScheme == .dark ? 0.52 : 0.95) : (colorScheme == .dark ? 0.18 : 0.45))
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
                         .strokeBorder(
-                            isTargeted ? AppTheme.accentGradient : AppTheme.borderGradient,
+                            isTargeted ? AppTheme.accentGradient : AppTheme.borderGradient(for: colorScheme),
                             style: StrokeStyle(lineWidth: isTargeted ? 2 : 1.5, dash: [10, 6])
                         )
                 }
-                .shadow(color: AppTheme.shadowColor, radius: 20, x: 0, y: 14)
+                .shadow(color: AppTheme.shadowColor(for: colorScheme), radius: 20, x: 0, y: 14)
 
             VStack(spacing: 14) {
                 ZStack {
@@ -50,7 +51,7 @@ struct DropAreaView: View {
                         .opacity(isTargeted ? 0.9 : 0.72)
                         .frame(width: 68, height: 68)
                     Circle()
-                        .fill(.white.opacity(0.28))
+                        .fill(AppTheme.raisedSurfaceFill(for: colorScheme, emphasized: true))
                         .frame(width: 52, height: 52)
                     Image(systemName: iconName)
                         .font(.system(size: 28, weight: .semibold))
@@ -75,7 +76,7 @@ struct DropAreaView: View {
 
                 Button(NSLocalizedString("browse", comment: "Browse button"), action: onBrowse)
                     .buttonStyle(.borderedProminent)
-                    .tint(.white.opacity(0.28))
+                    .tint(AppTheme.secondaryProminentTint(for: colorScheme))
                     .foregroundStyle(.primary)
             }
             .padding(24)

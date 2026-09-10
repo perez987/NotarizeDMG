@@ -20,7 +20,7 @@
 "help" = "Help";
 
 /* Settings */
-"signing_identity" = "Identity\n";
+"signing_identity" = "Identity";
 "signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
 "code_signing" = "Code Signing\n";
 "apple_developer_account" = "Apple Developer Account\n";

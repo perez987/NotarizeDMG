@@ -2,11 +2,12 @@ import AppKit
 import SwiftUI
 
 struct HelpView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ZStack {
-            AppTheme.windowGradient
+            AppTheme.windowGradient(for: colorScheme)
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
@@ -34,7 +35,7 @@ struct HelpView: View {
                     .textSelection(.enabled)
                 }
                 .scrollIndicators(.hidden)
-                .glassCard(cornerRadius: 28, accentOpacity: 0.18)
+                .glassCard(colorScheme: colorScheme, cornerRadius: 28, accentOpacity: 0.18)
 
                 HStack {
                     Spacer()
@@ -44,7 +45,7 @@ struct HelpView: View {
                         .keyboardShortcut(.defaultAction)
                 }
                 .padding(18)
-                .glassCard(cornerRadius: 24, accentOpacity: 0.16)
+                .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.16)
             }
             .padding(20)
         }
@@ -78,7 +79,7 @@ struct HelpView: View {
             Spacer()
         }
         .padding(18)
-        .glassCard(cornerRadius: 26, accentOpacity: 0.28)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 26, accentOpacity: 0.28)
     }
 
     private func helpSection(icon: String, title: String, body: String) -> some View {
@@ -100,15 +101,15 @@ struct HelpView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(.white.opacity(0.2))
+                .fill(AppTheme.raisedSurfaceFill(for: colorScheme))
                 .overlay {
                     RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .fill(AppTheme.accentGlow)
+                        .fill(AppTheme.accentGlow(for: colorScheme))
                         .opacity(0.16)
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .strokeBorder(AppTheme.borderGradient, lineWidth: 1)
+                        .strokeBorder(AppTheme.borderGradient(for: colorScheme), lineWidth: 1)
                 }
         }
     }

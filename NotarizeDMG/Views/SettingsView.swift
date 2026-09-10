@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var credentials: CredentialsManager
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
 
     @State private var signingIdentity = ""
@@ -11,7 +12,7 @@ struct SettingsView: View {
 
     var body: some View {
         ZStack {
-            AppTheme.windowGradient
+            AppTheme.windowGradient(for: colorScheme)
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
@@ -30,7 +31,7 @@ struct SettingsView: View {
             }
             .padding(20)
         }
-        .frame(width: 520, height: 600)
+        .frame(width: 520, height: 540)
         .onAppear {
             signingIdentity = credentials.signingIdentity
             appleID = credentials.appleID
@@ -47,14 +48,14 @@ struct SettingsView: View {
                     .opacity(0.2)
                     .frame(width: 50, height: 50)
                 Image(systemName: "gearshape.fill")
-                    .font(.system(size: 24, weight: .semibold))
+                    .font(.system(size: 21, weight: .semibold))
                     .foregroundStyle(AppTheme.accentGradient)
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(NSLocalizedString("settings", comment: "Settings button"))
                     .font(.title2.weight(.semibold))
-                Text("\n• \(NSLocalizedString("code_signing", comment: "Code signing section title")) \n• \(NSLocalizedString("apple_developer_account", comment: "Apple developer section title"))")
+                Text("\n• \(NSLocalizedString("code_signing", comment: "Code signing section title"))\n• \(NSLocalizedString("apple_developer_account", comment: "Apple developer section title"))")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -62,7 +63,7 @@ struct SettingsView: View {
             Spacer()
         }
         .padding(18)
-        .glassCard(cornerRadius: 26, accentOpacity: 0.28)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 26, accentOpacity: 0.28)
     }
 
     private var signingSection: some View {
@@ -124,12 +125,11 @@ struct SettingsView: View {
             let footerString = NSLocalizedString("generate_app_password_footer", comment: "App password footer")
             Text((try? AttributedString(markdown: footerString)) ?? AttributedString(footerString))
                 .font(.callout)
-                .multilineTextAlignment(.trailing)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 4)
         }
-        .padding(.bottom, 10)
+        .padding(.bottom, 12)
     }
 
     private var actionsCard: some View {
@@ -157,7 +157,7 @@ struct SettingsView: View {
             .disabled(signingIdentity.isEmpty || appleID.isEmpty || teamID.isEmpty || appPassword.isEmpty)
         }
         .padding(18)
-        .glassCard(cornerRadius: 24, accentOpacity: 0.16)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.16)
     }
 
     private func settingsSection<Content: View>(
@@ -171,7 +171,7 @@ struct SettingsView: View {
             content()
         }
         .padding(18)
-        .glassCard(cornerRadius: 28, accentOpacity: 0.18)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 28, accentOpacity: 0.18)
     }
 
     private func fieldRow<Content: View>(
@@ -195,15 +195,15 @@ struct SettingsView: View {
             .padding(.vertical, 10)
             .background {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(.white.opacity(0.34))
+                    .fill(AppTheme.fieldFill(for: colorScheme))
                     .overlay {
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(AppTheme.accentGlow)
+                            .fill(AppTheme.accentGlow(for: colorScheme))
                             .opacity(0.18)
                     }
                     .overlay {
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .strokeBorder(AppTheme.borderGradient, lineWidth: 1)
+                            .strokeBorder(AppTheme.borderGradient(for: colorScheme), lineWidth: 1)
                     }
             }
     }

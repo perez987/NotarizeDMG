@@ -8,6 +8,7 @@ enum AppMode: Int {
 
 struct ContentView: View {
     @EnvironmentObject private var credentials: CredentialsManager
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openWindow) private var openWindow
     @StateObject private var manager = NotarizationManager()
     @AppStorage("lastOutputFolderPath") private var lastOutputFolderPath = ""
@@ -22,7 +23,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            AppTheme.windowGradient
+            AppTheme.windowGradient(for: colorScheme)
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
@@ -115,7 +116,7 @@ struct ContentView: View {
     // MARK: - Subviews
 
     private var windowHeight: CGFloat {
-        mode == .build ? 700 : 640
+        mode == .build ? 696 : 636
     }
 
     private var modePicker: some View {
@@ -132,17 +133,17 @@ struct ContentView: View {
                     .fill(.thinMaterial)
                     .overlay {
                         Capsule(style: .continuous)
-                            .fill(AppTheme.accentGlow)
-                            .opacity(0.55)
+                            .fill(AppTheme.accentGlow(for: colorScheme))
+                            .opacity(colorScheme == .dark ? 0.28 : 0.55)
                     }
                     .overlay {
                         Capsule(style: .continuous)
-                            .strokeBorder(AppTheme.borderGradient, lineWidth: 1)
+                            .strokeBorder(AppTheme.borderGradient(for: colorScheme), lineWidth: 1)
                     }
             }
         }
         .padding(16)
-        .glassCard(cornerRadius: 26, accentOpacity: 0.3)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 26, accentOpacity: 0.3)
     }
 
     private var outputFolderRow: some View {
@@ -173,13 +174,13 @@ struct ContentView: View {
                 showFolderPicker = true
             }
             .buttonStyle(.borderedProminent)
-            .tint(.white.opacity(0.24))
+            .tint(AppTheme.secondaryProminentTint(for: colorScheme))
             .foregroundStyle(.primary)
             .controlSize(.regular)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .glassCard(cornerRadius: 24, accentOpacity: 0.18)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.18)
     }
 
     private var controlsRow: some View {
@@ -191,7 +192,7 @@ struct ContentView: View {
                     .foregroundStyle(.orange)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(.white.opacity(0.35), in: Capsule(style: .continuous))
+                    .background(AppTheme.warningFill(for: colorScheme), in: Capsule(style: .continuous))
             }
             Spacer()
             Button(NSLocalizedString("settings", comment: "Settings button")) { showSettings = true }
@@ -210,7 +211,7 @@ struct ContentView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .glassCard(cornerRadius: 24, accentOpacity: 0.2)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.2)
     }
 
     private var mainActionButton: some View {
@@ -247,7 +248,7 @@ struct ContentView: View {
     private var createDMGAlertOverlay: some View {
         ZStack {
             Rectangle()
-                .fill(.black.opacity(0.18))
+                .fill(AppTheme.scrim(for: colorScheme))
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
@@ -268,7 +269,7 @@ struct ContentView: View {
 
                 Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
                     .font(.callout)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -280,9 +281,9 @@ struct ContentView: View {
                 .keyboardShortcut(.defaultAction)
             }
             .padding(24)
-            .frame(width: 420)
-            .glassCard(cornerRadius: 30, accentOpacity: 0.24)
-            .shadow(color: AppTheme.shadowColor, radius: 26, x: 0, y: 18)
+            .frame(width: 290)
+            .glassCard(colorScheme: colorScheme, cornerRadius: 30, accentOpacity: 0.24)
+            .shadow(color: AppTheme.shadowColor(for: colorScheme), radius: 26, x: 0, y: 18)
         }
     }
 
@@ -308,18 +309,18 @@ struct ContentView: View {
             .padding(.vertical, 14)
 
             Divider()
-                .overlay(.white.opacity(0.32))
+                .overlay(colorScheme == .dark ? .white.opacity(0.10) : .white.opacity(0.32))
 
             ScrollViewReader { proxy in
                 ScrollView {
                     Text(manager.log.isEmpty ? NSLocalizedString("ready", comment: "Log ready") : manager.log)
-                        .font(.system(.body, design: .monospaced))
+                        .font(.system(.callout))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(16)
                         .textSelection(.enabled)
                         .id("logBottom")
                 }
-                .background(Color.white.opacity(0.12))
+//                .background(AppTheme.logBackground(for: colorScheme))
                 .onChange(of: manager.log) {
                     withAnimation(.easeOut(duration: 0.1)) {
                         proxy.scrollTo("logBottom", anchor: .bottom)
@@ -328,6 +329,6 @@ struct ContentView: View {
             }
 //            .frame(minHeight: 200, maxHeight: .infinity)
         }
-        .glassCard(cornerRadius: 28, accentOpacity: 0.16)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 28, accentOpacity: 0.16)
     }
 }
