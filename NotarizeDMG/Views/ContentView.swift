@@ -7,6 +7,11 @@ enum AppMode: Int {
 }
 
 struct ContentView: View {
+    private enum OverlayFocus: Hashable {
+        case createDMGOK
+        case existingConflictCancel
+    }
+
     @EnvironmentObject private var credentials: CredentialsManager
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.openWindow) private var openWindow
@@ -20,6 +25,7 @@ struct ContentView: View {
     @State private var showFolderPicker = false
     @State private var showSettings = false
     @State private var isDropTargeted = false
+    @FocusState private var focusedOverlayButton: OverlayFocus?
 
     var body: some View {
         ZStack {
@@ -53,8 +59,13 @@ struct ContentView: View {
             .padding(.horizontal, 22)
             .padding(.top, 22)
             .padding(.bottom, 30)
+            .accessibilityHidden(manager.existingDMGConflictURL != nil || showCreateDMGAlert)
 
-            if showCreateDMGAlert {
+            if let conflictURL = manager.existingDMGConflictURL {
+                existingDMGAlertOverlay(conflictURL: conflictURL)
+                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                    .zIndex(2)
+            } else if showCreateDMGAlert {
                 createDMGAlertOverlay
                     .transition(.opacity.combined(with: .scale(scale: 0.96)))
                     .zIndex(1)
@@ -279,11 +290,73 @@ struct ContentView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .keyboardShortcut(.defaultAction)
+                .focused($focusedOverlayButton, equals: .createDMGOK)
             }
             .padding(24)
             .frame(width: 290)
             .glassCard(colorScheme: colorScheme, cornerRadius: 30, accentOpacity: 0.24)
             .shadow(color: AppTheme.shadowColor(for: colorScheme), radius: 26, x: 0, y: 18)
+            .onAppear { focusedOverlayButton = .createDMGOK }
+        }
+    }
+
+    private func existingDMGAlertOverlay(conflictURL: URL) -> some View {
+        ZStack {
+            Rectangle()
+                .fill(AppTheme.scrim(for: colorScheme))
+                .ignoresSafeArea()
+
+            VStack(spacing: 16) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .fill(AppTheme.accentGradient)
+                        .opacity(0.22)
+                        .frame(width: 52, height: 52)
+
+                    Image(systemName: "externaldrive.badge.exclamationmark")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundStyle(AppTheme.accentGradient)
+                }
+
+                Text(NSLocalizedString("dmg_exists_alert_title", comment: "existing DMG alert title"))
+                    .font(.title3.weight(.semibold))
+                    .multilineTextAlignment(.center)
+
+                Text(
+                    String(
+                        format: NSLocalizedString("dmg_exists_alert_message_format", comment: "existing DMG alert message"),
+                        conflictURL.lastPathComponent
+                    )
+                )
+                .font(.callout)
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+
+                HStack(spacing: 10) {
+                    Button(NSLocalizedString("dmg_exists_alert_cancel", comment: "existing DMG alert cancel button")) {
+                        manager.dismissExistingDMGConflict()
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .keyboardShortcut(.cancelAction)
+                    .focused($focusedOverlayButton, equals: .existingConflictCancel)
+
+                    Button(NSLocalizedString("dmg_exists_alert_replace", comment: "existing DMG alert replace button")) {
+                        manager.replaceExistingDMGAndRetry(credentials: credentials)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .keyboardShortcut(.defaultAction)
+                }
+            }
+            .padding(24)
+            .frame(width: 330)
+            .glassCard(colorScheme: colorScheme, cornerRadius: 30, accentOpacity: 0.24)
+            .shadow(color: AppTheme.shadowColor(for: colorScheme), radius: 26, x: 0, y: 18)
+            .accessibilityElement(children: .contain)
+            .accessibilityAddTraits(.isModal)
+            .onAppear { focusedOverlayButton = .existingConflictCancel }
         }
     }
 

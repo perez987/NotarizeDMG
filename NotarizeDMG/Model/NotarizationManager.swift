@@ -7,9 +7,12 @@ final class NotarizationManager: ObservableObject {
     @Published var dmgURL: URL?
     @Published var appURL: URL?
     @Published var outputFolder: URL?
+    @Published var existingDMGConflictURL: URL?
 
     private var currentProcess: Process?
     private var isCancelled = false
+    private var conflictAppURL: URL?
+    private var conflictOutputFolderURL: URL?
 
     // MARK: - Public API
 
@@ -43,6 +46,10 @@ final class NotarizationManager: ObservableObject {
             appendLog("❌ No output folder selected.\n")
             return
         }
+        buildAndNotarize(credentials: credentials, appURL: appURL, outputFolder: outputFolder)
+    }
+
+    private func buildAndNotarize(credentials: CredentialsManager, appURL: URL, outputFolder: URL) {
         guard let createDMGPath = findCreateDMG() else {
             appendLog("❌ create-dmg not found.\n")
             appendLog("   Install it: npm install --global create-dmg\n")
@@ -54,19 +61,40 @@ final class NotarizationManager: ObservableObject {
             return
         }
 
-        isRunning = true
         isCancelled = false
+        existingDMGConflictURL = nil
+        conflictAppURL = nil
+        conflictOutputFolderURL = nil
+
+        if let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+            existingDMGConflictURL = conflictURL
+            conflictAppURL = appURL
+            conflictOutputFolderURL = outputFolder
+            log = ""
+            appendLog("⚠️ DMG already exists: \(conflictURL.lastPathComponent)\n")
+            return
+        }
+
         log = ""
+        isRunning = true
 
         Task {
             appendLog("🟦 ──── Step 1: Building DMG with create-dmg ────\n\n")
             appendLog("Using: \(createDMGPath)\n\n")
 
             let buildStartDate = Date()
+            let buildLogStartIndex = log.endIndex
             let buildExit = await shell(createDMGPath, args: [appURL.path, outputFolder.path])
+            let buildLogOutput = String(log[buildLogStartIndex...])
 
             guard buildExit == 0, !isCancelled else {
                 if !isCancelled {
+                    if buildLogOutput.localizedCaseInsensitiveContains("target already exists"),
+                       let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                        existingDMGConflictURL = conflictURL
+                        conflictAppURL = appURL
+                        conflictOutputFolderURL = outputFolder
+                    }
                     appendLog("\n❌ create-dmg failed (exit \(buildExit)).\n")
                 }
                 isRunning = false
@@ -95,6 +123,58 @@ final class NotarizationManager: ObservableObject {
         currentProcess = nil
         isRunning = false
         appendLog("\n⚠️  Cancelled by user.\n")
+    }
+
+    func dismissExistingDMGConflict() {
+        clearConflictState()
+    }
+
+    func replaceExistingDMGAndRetry(credentials: CredentialsManager) {
+        guard let conflictURL = existingDMGConflictURL,
+              let appURL = conflictAppURL,
+              let outputFolder = conflictOutputFolderURL
+        else { return }
+        guard credentials.isValid else {
+            clearConflictState()
+            appendLog("❌ Missing credentials — open Settings and fill in all fields.\n")
+            return
+        }
+        guard findCreateDMG() != nil else {
+            clearConflictState()
+            appendLog("❌ create-dmg not found.\n")
+            appendLog("   Install it: npm install --global create-dmg\n")
+            appendLog("   Expected at /usr/local/bin/create-dmg (Intel) or /opt/homebrew/bin/create-dmg (Apple Silicon)\n")
+            return
+        }
+        do {
+            let values = try conflictURL.resourceValues(forKeys: [.isRegularFileKey, .isDirectoryKey])
+            guard values.isRegularFile == true else {
+                appendLog("❌ Existing path is not a regular DMG file and cannot be replaced.\n")
+                return
+            }
+        } catch {
+            appendLog("❌ Could not validate existing DMG path: \(error.localizedDescription)\n")
+            return
+        }
+        do {
+            try FileManager.default.removeItem(at: conflictURL)
+            if let remainingConflict = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                existingDMGConflictURL = remainingConflict
+                conflictAppURL = appURL
+                conflictOutputFolderURL = outputFolder
+                appendLog("❌ Existing DMG could not be replaced.\n")
+                return
+            }
+            clearConflictState()
+            appendLog("🗑️ Removed existing DMG: \(conflictURL.lastPathComponent)\n")
+        } catch {
+            appendLog("❌ Could not remove existing DMG: \(error.localizedDescription)\n")
+            if !FileManager.default.fileExists(atPath: conflictURL.path) {
+                clearConflictState()
+            }
+            return
+        }
+        buildAndNotarize(credentials: credentials, appURL: appURL, outputFolder: outputFolder)
     }
 
     // MARK: - Private helpers
@@ -250,6 +330,78 @@ final class NotarizationManager: ObservableObject {
                 continuation.resume(returning: process.terminationStatus)
             }
         }
+    }
+
+    private func findExistingExpectedDMG(in outputFolder: URL, appURL: URL) -> URL? {
+        for expectedURL in expectedDMGURLs(in: outputFolder, appURL: appURL) {
+            var isDirectory = ObjCBool(false)
+            if FileManager.default.fileExists(atPath: expectedURL.path, isDirectory: &isDirectory),
+               !isDirectory.boolValue {
+                return expectedURL
+            }
+        }
+        return nil
+    }
+
+    private func expectedDMGURLs(in outputFolder: URL, appURL: URL) -> [URL] {
+        expectedDMGNames(for: appURL).map {
+            URL(fileURLWithPath: (outputFolder.path as NSString).appendingPathComponent($0))
+        }
+    }
+
+    private func expectedDMGNames(for appURL: URL) -> [String] {
+        var baseNames = [appURL.deletingPathExtension().lastPathComponent]
+        var version: String?
+
+        if let bundle = Bundle(url: appURL) {
+            let bundleNames = [
+                bundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String,
+                bundle.object(forInfoDictionaryKey: "CFBundleName") as? String,
+            ]
+
+            for bundleName in bundleNames {
+                let trimmedName = bundleName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                if !trimmedName.isEmpty {
+                    baseNames.append(trimmedName)
+                }
+            }
+
+            let trimmedVersion = (bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String)?
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if let trimmedVersion, !trimmedVersion.isEmpty {
+                version = trimmedVersion
+            }
+        }
+
+        var seenBaseNames = Set<String>()
+        let expectedBaseNames = baseNames
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .filter { seenBaseNames.insert($0).inserted }
+
+        var seenFilenames = Set<String>()
+        var filenames = [String]()
+        for baseName in expectedBaseNames {
+            if let version, !version.isEmpty {
+                let versionedName = "\(baseName) \(version).dmg"
+                if seenFilenames.insert(versionedName).inserted {
+                    filenames.append(versionedName)
+                }
+            }
+
+            let unversionedName = "\(baseName).dmg"
+            if seenFilenames.insert(unversionedName).inserted {
+                filenames.append(unversionedName)
+            }
+        }
+
+        return filenames
+    }
+
+    private func clearConflictState() {
+        existingDMGConflictURL = nil
+        conflictAppURL = nil
+        conflictOutputFolderURL = nil
     }
 
     private func appendLog(_ text: String) {

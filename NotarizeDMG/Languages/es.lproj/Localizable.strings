@@ -59,6 +59,12 @@
 "create_dmg_alert_message" = "create-dmg no está instalada en este sistema. Es necesaria para crear elegantes imágenes DMG. Sin ella, sólo puedes notarizar imágenes DMG existentes. Haz clic en el botón de ayuda (?) para ver las instrucciones de instalación.";
 "create_dmg_alert_button" = "OK";
 
+/* Alerta: conflicto con DMG existente */
+"dmg_exists_alert_title" = "La DMG ya existe";
+"dmg_exists_alert_message_format" = "\"%@\" ya existe en la carpeta de salida. ¿Deseas reemplazarla?";
+"dmg_exists_alert_cancel" = "Cancelar";
+"dmg_exists_alert_replace" = "Reemplazar";
+
 /* Update Check */
 "Check for Updates…" = "Buscar actualizaciones…";
 "UpdateAvailable" = "Actualización disponible";
