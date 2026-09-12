@@ -2,7 +2,7 @@
 
 ![Platform](https://img.shields.io/badge/macOS-14-orange.svg)
 ![Swift](https://img.shields.io/badge/Swift-5-blue.svg)
-![Xcode](https://img.shields.io/badge/Xcode-15-lavender.svg)
+![Xcode](https://img.shields.io/badge/Xcode-16-lavender.svg)
 <!-- [![Spanish](https://shields.io/badge/Language-English-green.svg)](README.md) -->
 
   <p align="center">
