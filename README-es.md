@@ -9,7 +9,7 @@
      <img width=200 src=Images/AppIcon1.png>
   </p>
 
-NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con Apple una imagen DMG firmada o sin firmar, todo desde una sola ventana. También integra la herramienta `create-dmg` (si está instalada) para crear una DMG con un diseño cuidado a partir de un paquete `application` y notarizarla en un solo paso.
+NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con Apple una imagen DMG firmada o sin firmar, todo desde una sola ventana. En el modo Crear y notarizar prefiere `create-dmg` cuando está disponible y recurre a un flujo interno con AppleScript + Finder cuando no lo está.
 
 |                                               |
 | :-------------------------------------------: |
@@ -19,15 +19,15 @@ NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con 
 
 |                             |                             |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Dos modos**               | **Notarizar DMG** — firma y notariza un archivo `.dmg` existente. **Crear y Notarizar DMG** — crea un archivo DMG a partir de una `.app` con `create-dmg`, y lo firma y notariza |
+| **Dos modos**               | **Notarizar DMG** — firma y notariza un archivo `.dmg` existente. **Crear y Notarizar DMG** — crea un archivo DMG a partir de una `.app`, y luego lo firma y notariza usando `create-dmg` si está instalado o AppleScript + Finder como alternativa |
 | **Arrastrar y soltar**      | Arrastra una `.dmg` o `.app` a la ventana, o usa _Examinar…_ para buscarlo                                                                                                       |
 | **Carpeta de salida**       | En el modo `Crear y Notarizar DMG`, elige la carpeta donde se guardará la DMG resultante; la elección se guarda entre sesiones                                                 |
-| **Acción en un clic**       | Notarize ejecuta `codesign`, `xcrun notarytool submit --wait` y `xcrun stapler staple` en secuencia (precedidos por `create-dmg` en el modo `**Crear y Notarizar DMG**`)                  |
+| **Acción en un clic**       | Notarize ejecuta `codesign`, `xcrun notarytool submit --wait` y `xcrun stapler staple` en secuencia (precedidos por `create-dmg` o por el creador DMG interno basado en AppleScript en el modo `**Crear y Notarizar DMG**`)                  |
 | **Cancelar**                | Detiene una operación en curso en cualquier momento con el botón _Cancelar_                                                                                                  |
 | **Registro en tiempo real** | La salida de los comandos se muestra en un área de registro en tiempo real, con botones _Copiar_ y _Limpiar_                                                                    |
 | **Credenciales seguras**    | Apple ID, Team ID, la identidad de firma y la contraseña específica de la aplicación se almacenan como un único elemento JSON en el Llavero del sistema, nunca en texto plano   |
 | **Panel de ajustes**        | Abre con el botón _Ajustes…_ o con ⌘, para introducir o actualizar las credenciales                                                                                             |
-| **Panel de ayuda**          | Ayuda integrada sobre la instalación y el uso de `create-dmg`, accesible con el botón **?**                                                                     |
+| **Panel de ayuda**          | Ayuda integrada sobre ambas rutas de creación de DMG y la instalación de `create-dmg`, accesible con el botón **?**                                                                     |
 | **Sistema de idiomas**      | Inglés (predeterminado), español, francés, alemán e italiano. Cámbialo desde el menú _Idioma_ (⌘L)                                                                  |
 
 **Nota**: en el modo **Crear y Notarizar DMG**, hasta que no eliges una carpeta de destino, el botón `Crear y Notarizar` permanece deshabilitado.
@@ -38,7 +38,7 @@ NotarizeDMG requiere un archivo DMG (firmado digitalmente o no) como fuente. Est
 
 Para crear fácilmente una imagen DMG con un aspecto más elegante, me gusta mucho la herramienta gratuita de línea de comandos [create-dmg](https://github.com/sindresorhus/create-dmg) de _Sindresorhus_.
 
-NotarizeDMG añade integración con `create-dmg` mediante un modo `Crear y Notarizar DMG` que delega la creación del DMG en `create-dmg` ya instalada por el usuario, esta herramienta produce el esperado diseño elegante de la ventana del Finder.
+NotarizeDMG añade integración con `create-dmg` mediante un modo `Crear y Notarizar DMG` que delega la creación del DMG en `create-dmg` cuando está instalada y, si no lo está, recurre a un flujo interno con AppleScript + Finder.
 
 Muchos proyectos utilizan AppleScript para generar imágenes DMG con ventanas del Finder personalizadas, pero tiene algunas desventajas:
 
@@ -46,7 +46,7 @@ Muchos proyectos utilizan AppleScript para generar imágenes DMG con ventanas de
 - AppleScript requiere que el usuario conceda permisos en Privacidad y Seguridad → Automatización
 - Aplicar el diseño a la ventana del DMG es bastante lento.
 
-NotarizeDMG, en cambio, al usar `create-dmg` como herramienta de creación de DMG, evita estas desventajas, no requiere permiso de Automatización y la creación de la imagen es muy rápida.
+Cuando `create-dmg` está instalada, NotarizeDMG usa esa ruta más rápida y evita por completo el permiso de Automatización de Finder. Cuando no lo está, la app sigue funcionando mediante la alternativa integrada con AppleScript, aunque macOS puede solicitar permiso de Automatización para Finder.
 
 El requisito previo para tener `create-dmg` es tener instalado Node.js 20 o posterior. Una forma de instalar Node es a través del gestor de paquetes Homebrew. Aunque esto es un paso adicional en comparación con instalar Node directamente desde su propio instalador, puede ayudarte a evitar errores de permisos y otros problemas.
 
@@ -81,7 +81,7 @@ La imagen DMG creada tiene un diseño elegante que me gusta mucho y el proceso e
 
 ## Ayuda para create-dmg
 
-Si la app no detecta `create-dmg` en el sistema, una alerta notifica al usuario, llevándole al botón de ayuda (?) con instrucciones de instalación.
+Si la app no detecta `create-dmg` en el sistema, el modo Crear y notarizar cambia automáticamente a la alternativa integrada con AppleScript y la interfaz avisa de que macOS puede pedir permiso de Automatización para Finder.
 
 <table align="center">
   <tr>
@@ -146,11 +146,11 @@ create-dmg "<ruta/a/App.app>" "<carpeta-de-salida>"
 # Pasos 1–3: firma, notariza y engrapa la DMG resultante (igual que en el otro modo)
 ```
 
-El binario `create-dmg` se detecta automáticamente en `/usr/local/bin/create-dmg` (Intel) o `/opt/homebrew/bin/create-dmg` (Apple Silicon).
+El binario `create-dmg` se detecta automáticamente en `/usr/local/bin/create-dmg` (Intel) o `/opt/homebrew/bin/create-dmg` (Apple Silicon). Si no se encuentra, NotarizeDMG monta una DMG temporal editable, aplica el diseño de la ventana del Finder con AppleScript, comprime la imagen y continúa con la firma, la notarización y el grapado del ticket.
 
 ## Notas de seguridad
 
-- El proyecto no incorpora **App Sandbox** (`com.apple.security.app-sandbox = false`). Esto es necesario para que la aplicación pueda invocar `codesign`, `xcrun` y `create-dmg` como procesos hijos.
+- El proyecto no incorpora **App Sandbox** (`com.apple.security.app-sandbox = false`). Esto es necesario para que la aplicación pueda invocar `codesign`, `xcrun`, `create-dmg`, `hdiutil` y la automatización de Finder como operaciones hijas.
 - Las cuatro credenciales se almacenan como un único elemento JSON en el Llavero del sistema bajo el nombre de servicio `perez987.notarizedmg` usando `kSecAttrAccessibleWhenUnlocked`. Nunca se escriben en disco en texto plano.
 - El campo de contraseña de la aplicación usa `SecureField` y nunca se registra en el log.
 - Los elementos del Llavero (separados en 4 campos individuales) de versiones anteriores se migran automáticamente al formato combinado en el primer arranque y luego se eliminan.

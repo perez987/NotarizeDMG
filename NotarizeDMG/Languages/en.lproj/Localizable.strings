@@ -43,21 +43,33 @@
 
 /* Help */
 "notarizeDMG_help" = "NotarizeDMG Supplementary Help";
-"help_button_tooltip" = "How to install and use create-dmg";
-"help_title" = "Add-on: create-dmg";
-"help_step1_title" = "What is create-dmg?";
-"help_step1_body" = "NotarizeDMG requires a DMG image of a digitally signed macOS application. There is a tool, [create-dmg](https://github.com/sindresorhus/create-dmg), that creates DMG images of macOS applications with an elegant and polished window design.";
+"help_button_tooltip" = "How DMG creation works";
+"help_title" = "DMG creation paths";
+"help_step1_title" = "Two ways to build the DMG";
+"help_step1_body" = "In **Build & Notarize** mode, NotarizeDMG first creates a polished DMG from your signed `.app`, then signs, notarizes, and staples the DMG. It prefers [create-dmg](https://github.com/sindresorhus/create-dmg) when installed and falls back to a built-in AppleScript + Finder workflow when create-dmg is not available.";
 "help_step2_title" = "Install create-dmg";
 "help_step2_body" = "To have create-dmg on your system, follow these steps:\n⎯ Install [Homebrew](https://brew.sh)\n⎯ Install Node 20+ → `brew install node`\n⎯ Install create-dmg → `npm install --global create-dmg`\n⎯ Optional → If you get a message about\n     `allow-scripts=fs-xattr,macos-alias`\n     run\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
-"help_step3_title" = "create-dmg in Terminal (automated by NotarizeDMG)";
-"help_step3_body" = "⎯ create-dmg is available at\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ Run → `create-dmg <file.dmg>`.\n⎯ The result is created in the folder from which you run Terminal.\n⎯ Also, the DMG image is already digitally signed.";
+"help_step3_title" = "Preferred path: create-dmg";
+"help_step3_body" = "⎯ create-dmg is available at\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ NotarizeDMG detects it automatically and uses it to build the DMG before notarization.\n⎯ This path is fast and does not require Finder Automation permission.";
+"help_step4_title" = "Fallback path: AppleScript + Finder";
+"help_step4_body" = "⎯ If create-dmg is not installed, NotarizeDMG falls back to a built-in AppleScript workflow.\n⎯ macOS may ask you to allow Finder Automation the first time.\n⎯ The fallback still creates the DMG, then the app signs, notarizes, and staples it automatically.";
 "help_workflow_title" = "What happens under the hood";
 "help_workflow_body" = "The app runs three commands in sequence:\n⎯ `codesign --sign \"<Identity>\" --timestamp \"<file.dmg>\"`\n⎯ `xcrun notarytool submit \"<file.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<file.dmg>\"`";
 
-/* create-dmg missing alert */
-"create_dmg_alert_title" = "create-dmg Not Installed";
-"create_dmg_alert_message" = "create-dmg is not installed on this system. It is required to build fancy DMG images. Without it, you can only notarize existing DMG images. Click the Help (?) button for installation instructions.";
-"create_dmg_alert_button" = "OK";
+/* Build fallback */
+"build_fallback_title" = "AppleScript fallback ready";
+"build_fallback_message" = "create-dmg is not installed, so Build & Notarize will use the built-in Finder-based fallback. macOS may ask for Finder Automation permission.";
+
+/* Finder Automation */
+"finder_automation_permission_message" = "NotarizeDMG needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable NotarizeDMG in System Settings › Privacy & Security › Automation, then try again.";
+"finder_automation_unavailable_message" = "Finder is not currently available for Automation. Try again after Finder finishes launching.";
+"finder_automation_failed_format" = "Finder Automation permission check failed (OSStatus %lld).";
+"finder_layout_not_persisted_message" = "Finder did not write the DMG window layout to disk. Confirm that NotarizeDMG has permission to control Finder in System Settings › Privacy & Security › Automation, then try again.";
+//"fallback_dmg_background_title" = "Drag to Applications";
+//"fallback_dmg_background_subtitle" = "Install the app by dragging it onto the Applications shortcut.";
+"fallback_command_failed_format" = "Command failed: %@ (exit %d).";
+"fallback_applescript_compilation_failed" = "Failed to compile AppleScript source.";
+"fallback_output_exists_format" = "The output file already exists: %@";
 
 /* Existing DMG conflict alert */
 "dmg_exists_alert_title" = "DMG already exists";

@@ -8,7 +8,6 @@ enum AppMode: Int {
 
 struct ContentView: View {
     private enum OverlayFocus: Hashable {
-        case createDMGOK
         case existingConflictCancel
     }
 
@@ -19,7 +18,6 @@ struct ContentView: View {
     @AppStorage("lastOutputFolderPath") private var lastOutputFolderPath = ""
 
     @State private var mode: AppMode = .build
-    @State private var showCreateDMGAlert = false
     @State private var showFilePicker = false
     @State private var showAppPicker = false
     @State private var showFolderPicker = false
@@ -54,21 +52,21 @@ struct ContentView: View {
 
                 controlsRow
 
+                if mode == .build, !manager.isCreateDMGInstalled {
+                    fallbackInfoRow
+                }
+
                 logBox
             }
             .padding(.horizontal, 22)
             .padding(.top, 22)
             .padding(.bottom, 30)
-            .accessibilityHidden(manager.existingDMGConflictURL != nil || showCreateDMGAlert)
+            .accessibilityHidden(manager.existingDMGConflictURL != nil)
 
             if let conflictURL = manager.existingDMGConflictURL {
                 existingDMGAlertOverlay(conflictURL: conflictURL)
                     .transition(.opacity.combined(with: .scale(scale: 0.96)))
                     .zIndex(2)
-            } else if showCreateDMGAlert {
-                createDMGAlertOverlay
-                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
-                    .zIndex(1)
             }
         }
         .frame(minWidth: 660, idealWidth: 660, maxWidth: 660,
@@ -101,9 +99,6 @@ struct ContentView: View {
             SettingsView().environmentObject(credentials)
         }
         .onAppear {
-            if mode == .build && !manager.isCreateDMGInstalled {
-                showCreateDMGAlert = true
-            }
             guard
                 manager.outputFolder == nil,
                 !lastOutputFolderPath.isEmpty
@@ -117,17 +112,26 @@ struct ContentView: View {
         .onChange(of: manager.outputFolder) { _, newValue in
             lastOutputFolderPath = newValue?.path ?? ""
         }
-        .onChange(of: mode) { _, newMode in
-            if newMode == .build && !manager.isCreateDMGInstalled {
-                showCreateDMGAlert = true
-            }
-        }
     }
 
     // MARK: - Subviews
 
     private var windowHeight: CGFloat {
-        mode == .build ? 696 : 636
+        switch mode {
+        case .build:
+            manager.isCreateDMGInstalled ? 696 : 800
+        case .notarize:
+            636
+        }
+    }
+
+    private var logBoxMinHeight: CGFloat {
+        switch mode {
+        case .build:
+            manager.isCreateDMGInstalled ? 260 : 340
+        case .notarize:
+            260
+        }
     }
 
     private var modePicker: some View {
@@ -225,6 +229,29 @@ struct ContentView: View {
         .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.2)
     }
 
+    private var fallbackInfoRow: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "wand.and.stars.inverse")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(AppTheme.accentGradient)
+                .frame(width: 24, height: 24)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(NSLocalizedString("build_fallback_title", comment: "Fallback info title"))
+                    .font(.headline.weight(.semibold))
+                Text(NSLocalizedString("build_fallback_message", comment: "Fallback info message"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.16)
+    }
+
     private var mainActionButton: some View {
         let isRunning = manager.isRunning
         let label: String
@@ -254,50 +281,6 @@ struct ContentView: View {
         .tint(isRunning ? .red : .accentColor.opacity(0.92))
         .controlSize(.large)
         .disabled(isDisabled)
-    }
-
-    private var createDMGAlertOverlay: some View {
-        ZStack {
-            Rectangle()
-                .fill(AppTheme.scrim(for: colorScheme))
-                .ignoresSafeArea()
-
-            VStack(spacing: 16) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .fill(AppTheme.accentGradient)
-                        .opacity(0.22)
-                        .frame(width: 52, height: 52)
-
-                    Image(systemName: "shippingbox.circle.fill")
-                        .font(.system(size: 24, weight: .semibold))
-                        .foregroundStyle(AppTheme.accentGradient)
-                }
-
-                Text(NSLocalizedString("create_dmg_alert_title", comment: "create-dmg missing alert title"))
-                    .font(.title3.weight(.semibold))
-                    .multilineTextAlignment(.center)
-
-                Text(NSLocalizedString("create_dmg_alert_message", comment: "create-dmg missing alert message"))
-                    .font(.callout)
-                    .foregroundStyle(.primary)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Button(NSLocalizedString("create_dmg_alert_button", comment: "create-dmg missing alert button")) {
-                    showCreateDMGAlert = false
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .keyboardShortcut(.defaultAction)
-                .focused($focusedOverlayButton, equals: .createDMGOK)
-            }
-            .padding(24)
-            .frame(width: 290)
-            .glassCard(colorScheme: colorScheme, cornerRadius: 30, accentOpacity: 0.24)
-            .shadow(color: AppTheme.shadowColor(for: colorScheme), radius: 26, x: 0, y: 18)
-            .onAppear { focusedOverlayButton = .createDMGOK }
-        }
     }
 
     private func existingDMGAlertOverlay(conflictURL: URL) -> some View {
@@ -402,6 +385,7 @@ struct ContentView: View {
             }
 //            .frame(minHeight: 200, maxHeight: .infinity)
         }
+//        .frame(minHeight: logBoxMinHeight, maxHeight: .infinity)
         .glassCard(colorScheme: colorScheme, cornerRadius: 28, accentOpacity: 0.16)
     }
 }

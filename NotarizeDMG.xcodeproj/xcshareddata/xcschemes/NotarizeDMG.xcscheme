@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B43A0B7F2BDE000000000001"
                BuildableName = "NotarizeDMG.app"
+               BlueprintName = "NotarizeDMG"
                ReferencedContainer = "container:NotarizeDMG.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,6 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B43A0B7F2BDE000000000001"
             BuildableName = "NotarizeDMG.app"
+            BlueprintName = "NotarizeDMG"
             ReferencedContainer = "container:NotarizeDMG.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,6 +64,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B43A0B7F2BDE000000000001"
             BuildableName = "NotarizeDMG.app"
+            BlueprintName = "NotarizeDMG"
             ReferencedContainer = "container:NotarizeDMG.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

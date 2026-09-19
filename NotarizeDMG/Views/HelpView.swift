@@ -30,6 +30,11 @@ struct HelpView: View {
                             title: NSLocalizedString("help_step3_title", comment: "Help step 3 title"),
                             body: NSLocalizedString("help_step3_body", comment: "Help step 3 body")
                         )
+                        helpSection(
+                            icon: "4.circle.fill",
+                            title: NSLocalizedString("help_step4_title", comment: "Help step 4 title"),
+                            body: NSLocalizedString("help_step4_body", comment: "Help step 4 body")
+                        )
                     }
                     .padding(18)
                     .textSelection(.enabled)

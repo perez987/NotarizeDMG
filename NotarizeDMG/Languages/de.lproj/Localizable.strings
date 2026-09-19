@@ -43,21 +43,33 @@
 
 /* Hilfe */
 "notarizeDMG_help" = "Ergänzende Hilfe zu NotarizeDMG";
-"help_button_tooltip" = "So installieren und verwenden Sie create-dmg";
-"help_title" = "Erweiterung: create-dmg";
-"help_step1_title" = "Was ist create-dmg?";
-"help_step1_body" = "NotarizeDMG benötigt ein DMG-Image einer digital signierten macOS-Anwendung. Es gibt ein Tool, [create-dmg](https://github.com/sindresorhus/create-dmg), das DMG-Images von macOS-Anwendungen mit einem eleganten und polierten Fensterdesign erstellt.";
+"help_button_tooltip" = "So funktioniert die DMG-Erstellung";
+"help_title" = "Wege zur DMG-Erstellung";
+"help_step1_title" = "Zwei Wege zum Erstellen des DMG";
+"help_step1_body" = "Im Modus **DMG erstellen und notarisieren** erstellt NotarizeDMG zunächst ein ansprechendes DMG aus Ihrer signierten `.app` und signiert, notarisiert und stapelt anschließend das DMG. Wenn [create-dmg](https://github.com/sindresorhus/create-dmg) installiert ist, wird es bevorzugt verwendet; andernfalls greift die App auf einen integrierten AppleScript- und Finder-Ablauf zurück.";
 "help_step2_title" = "create-dmg installieren";
 "help_step2_body" = "Um create-dmg auf Ihrem System zu haben, folgen Sie diesen Schritten:\n⎯ [Homebrew](https://brew.sh) installieren\n⎯ Node 20+ installieren → `brew install node`\n⎯ create-dmg installieren → `npm install --global create-dmg`\n⎯ Optional → Wenn Sie eine Meldung über\n     `allow-scripts=fs-xattr,macos-alias`\n     erhalten, führen Sie aus\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
-"help_step3_title" = "create-dmg im Terminal (automatisiert durch NotarizeDMG)";
-"help_step3_body" = "⎯ create-dmg ist verfügbar unter\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ Ausführen → `create-dmg <Datei.dmg>`.\n⎯ Das Ergebnis wird in dem Ordner erstellt, aus dem Sie das Terminal ausführen.\n⎯ Außerdem ist das DMG-Image bereits digital signiert.";
+"help_step3_title" = "Bevorzugter Weg: create-dmg";
+"help_step3_body" = "⎯ create-dmg ist verfügbar unter\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ NotarizeDMG erkennt das Tool automatisch und verwendet es vor der Notarisierung zum Erstellen des DMG.\n⎯ Dieser Weg ist schnell und benötigt keine Finder-Automatisierungsberechtigung.";
+"help_step4_title" = "Ausweichweg: AppleScript + Finder";
+"help_step4_body" = "⎯ Wenn create-dmg nicht installiert ist, verwendet NotarizeDMG einen integrierten AppleScript-Ablauf.\n⎯ Beim ersten Mal kann macOS Sie auffordern, die Finder-Automatisierung zu erlauben.\n⎯ Auch dieser Weg erstellt das DMG und die App signiert, notarisiert und stapelt es anschließend automatisch.";
 "help_workflow_title" = "Was im Hintergrund passiert";
 "help_workflow_body" = "Die App führt drei Befehle der Reihe nach aus:\n⎯ `codesign --sign \"<Identität>\" --timestamp \"<Datei.dmg>\"`\n⎯ `xcrun notarytool submit \"<Datei.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<Datei.dmg>\"`";
 
-/* create-dmg fehlt */
-"create_dmg_alert_title" = "create-dmg nicht installiert";
-"create_dmg_alert_message" = "create-dmg ist auf diesem System nicht installiert. Es wird benötigt, um elegante DMG-Images zu erstellen. Ohne es können Sie nur vorhandene DMG-Images notarisieren. Klicken Sie auf die Hilfe-Schaltfläche (?), um Installationsanweisungen zu erhalten.";
-"create_dmg_alert_button" = "OK";
+/* Ausweichweg */
+"build_fallback_title" = "AppleScript-Ausweichweg bereit";
+"build_fallback_message" = "create-dmg ist nicht installiert, daher verwendet Erstellen und Notarisieren den integrierten Finder-basierten Ausweichweg. macOS kann eine Finder-Automatisierungsberechtigung anfordern.";
+
+/* Finder-Automatisierung */
+"finder_automation_permission_message" = "NotarizeDMG benötigt die Finder-Automatisierungsberechtigung, um das DMG-Fensterlayout anzuwenden. Erlauben Sie den Finder-Zugriff bei der Aufforderung oder aktivieren Sie NotarizeDMG unter Systemeinstellungen > Datenschutz und Sicherheit > Automatisierung und versuchen Sie es erneut.";
+"finder_automation_unavailable_message" = "Finder ist derzeit für die Automatisierung nicht verfügbar. Versuchen Sie es erneut, nachdem Finder vollständig gestartet ist.";
+"finder_automation_failed_format" = "Die Prüfung der Finder-Automatisierungsberechtigung ist fehlgeschlagen (OSStatus %lld).";
+"finder_layout_not_persisted_message" = "Finder hat das DMG-Fensterlayout nicht auf die Festplatte geschrieben. Vergewissern Sie sich, dass NotarizeDMG unter Systemeinstellungen > Datenschutz und Sicherheit > Automatisierung den Finder steuern darf, und versuchen Sie es erneut.";
+//"fallback_dmg_background_title" = "In Programme ziehen";
+//"fallback_dmg_background_subtitle" = "Installieren Sie die App, indem Sie sie auf die Verknüpfung „Programme“ ziehen.";
+"fallback_command_failed_format" = "Befehl fehlgeschlagen: %@ (Exit %d).";
+"fallback_applescript_compilation_failed" = "Das AppleScript konnte nicht kompiliert werden.";
+"fallback_output_exists_format" = "Die Ausgabedatei existiert bereits: %@";
 
 /* Hinweis: DMG existiert bereits */
 "dmg_exists_alert_title" = "DMG existiert bereits";

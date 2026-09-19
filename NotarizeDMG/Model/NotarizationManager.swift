@@ -14,6 +14,18 @@ final class NotarizationManager: ObservableObject {
     private var conflictAppURL: URL?
     private var conflictOutputFolderURL: URL?
 
+    private enum ShellOutputMode {
+        case live
+        case liveStdoutOnly
+        case quiet
+        case quietAllowFailureOutput
+    }
+
+    private struct ShellResult {
+        let exitCode: Int32
+        let suppressedOutput: String
+    }
+
     // MARK: - Public API
 
     func notarize(credentials: CredentialsManager) {
@@ -50,12 +62,6 @@ final class NotarizationManager: ObservableObject {
     }
 
     private func buildAndNotarize(credentials: CredentialsManager, appURL: URL, outputFolder: URL) {
-        guard let createDMGPath = findCreateDMG() else {
-            appendLog("❌ create-dmg not found.\n")
-            appendLog("   Install it: npm install --global create-dmg\n")
-            appendLog("   Expected at /usr/local/bin/create-dmg (Intel) or /opt/homebrew/bin/create-dmg (Apple Silicon)\n")
-            return
-        }
         guard credentials.isValid else {
             appendLog("❌ Missing credentials — open Settings and fill in all fields.\n")
             return
@@ -79,34 +85,84 @@ final class NotarizationManager: ObservableObject {
         isRunning = true
 
         Task {
-            appendLog("🟦 ──── Step 1: Building DMG with create-dmg ────\n\n")
-            appendLog("Using: \(createDMGPath)\n\n")
+            let resultDMG: URL
 
-            let buildStartDate = Date()
-            let buildLogStartIndex = log.endIndex
-            let buildExit = await shell(createDMGPath, args: [appURL.path, outputFolder.path])
-            let buildLogOutput = String(log[buildLogStartIndex...])
+            if let createDMGPath = findCreateDMG() {
+                appendLog("🟦 ──── Step 1: Building DMG with create-dmg ────\n\n")
+                appendLog("Using: \(createDMGPath)\n\n")
 
-            guard buildExit == 0, !isCancelled else {
-                if !isCancelled {
-                    if buildLogOutput.localizedCaseInsensitiveContains("target already exists"),
-                       let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
-                        existingDMGConflictURL = conflictURL
-                        conflictAppURL = appURL
-                        conflictOutputFolderURL = outputFolder
+                let buildStartDate = Date()
+                let buildLogStartIndex = log.endIndex
+                let buildResult = await shell(createDMGPath, args: [appURL.path, outputFolder.path])
+                let buildExit = buildResult.exitCode
+                let buildLogOutput = String(log[buildLogStartIndex...])
+
+                guard buildExit == 0, !isCancelled else {
+                    if !isCancelled {
+                        if buildLogOutput.localizedCaseInsensitiveContains("target already exists"),
+                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                            existingDMGConflictURL = conflictURL
+                            conflictAppURL = appURL
+                            conflictOutputFolderURL = outputFolder
+                        }
+                        appendLog("\n❌ create-dmg failed (exit \(buildExit)).\n")
                     }
-                    appendLog("\n❌ create-dmg failed (exit \(buildExit)).\n")
+                    isRunning = false
+                    currentProcess = nil
+                    return
                 }
-                isRunning = false
-                currentProcess = nil
-                return
-            }
 
-            guard let resultDMG = findResultingDMG(in: outputFolder, createdAfter: buildStartDate) else {
-                appendLog("\n❌ Could not find resulting DMG in: \(outputFolder.path)\n")
-                isRunning = false
-                currentProcess = nil
-                return
+                guard let builtDMG = findResultingDMG(in: outputFolder, createdAfter: buildStartDate) else {
+                    appendLog("\n❌ Could not find resulting DMG in: \(outputFolder.path)\n")
+                    isRunning = false
+                    currentProcess = nil
+                    return
+                }
+                resultDMG = builtDMG
+            } else {
+                appendLog("🟦 ──── Step 1: Building DMG with AppleScript fallback ────\n\n")
+                appendLog("Using the built-in Finder-based fallback because create-dmg is not installed.\n")
+                appendLog("Finder Automation permission may be requested by macOS.\n\n")
+                appendLog("- Creating DMG\n")
+
+                let fallbackOutputName = expectedDMGNames(for: appURL).first
+                    ?? "\(appURL.deletingPathExtension().lastPathComponent).dmg"
+
+                do {
+                    let builder = AppleScriptDMGBuilder()
+                    resultDMG = try await builder.build(
+                        appURL: appURL,
+                        outputFolder: outputFolder,
+                        outputDMGName: fallbackOutputName,
+                        runProcess: { executable, arguments in
+                            let result = await self.shell(executable, args: arguments, outputMode: .quietAllowFailureOutput)
+                            if result.exitCode != 0, !result.suppressedOutput.isEmpty {
+                                self.appendLog(result.suppressedOutput)
+                            }
+                            return result.exitCode
+                        },
+                        onOutput: { text in
+                            self.appendLog(text)
+                        }
+                    )
+                    appendLog("✔ Created \"\(resultDMG.lastPathComponent)\"\n")
+                } catch {
+                    if !isCancelled {
+                        if case AppleScriptDMGBuilderError.outputAlreadyExists = error,
+                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                            existingDMGConflictURL = conflictURL
+                            conflictAppURL = appURL
+                            conflictOutputFolderURL = outputFolder
+                            isRunning = false
+                            currentProcess = nil
+                            return
+                        }
+                        appendLog("\n❌ AppleScript fallback failed: \(error.localizedDescription)\n")
+                    }
+                    isRunning = false
+                    currentProcess = nil
+                    return
+                }
             }
 
             appendLog("\n✅ DMG built: \(resultDMG.lastPathComponent)\n\n")
@@ -137,13 +193,6 @@ final class NotarizationManager: ObservableObject {
         guard credentials.isValid else {
             clearConflictState()
             appendLog("❌ Missing credentials — open Settings and fill in all fields.\n")
-            return
-        }
-        guard findCreateDMG() != nil else {
-            clearConflictState()
-            appendLog("❌ create-dmg not found.\n")
-            appendLog("   Install it: npm install --global create-dmg\n")
-            appendLog("   Expected at /usr/local/bin/create-dmg (Intel) or /opt/homebrew/bin/create-dmg (Apple Silicon)\n")
             return
         }
         do {
@@ -214,15 +263,19 @@ final class NotarizationManager: ObservableObject {
 
     private func runNotarizationSteps(dmgPath: String, credentials: CredentialsManager, stepOffset: Int) async {
         appendLog("🟦 ──── Step \(1 + stepOffset): Signing the DMG ────\n\n")
-        let verifyExit = await shell("/usr/bin/codesign", args: ["--verify", dmgPath])
+        let verifyExit = await shell("/usr/bin/codesign", args: ["--verify", dmgPath], outputMode: .quiet).exitCode
         if verifyExit == 0 {
             appendLog("ℹ️ \(URL(fileURLWithPath: dmgPath).lastPathComponent): is already signed.\n")
         } else {
-            let signExit = await shell("/usr/bin/codesign", args: [
+            let signResult = await shell("/usr/bin/codesign", args: [
                 "--sign", credentials.signingIdentity,
                 "--timestamp",
                 dmgPath,
-            ])
+            ], outputMode: .quietAllowFailureOutput)
+            let signExit = signResult.exitCode
+            if signExit != 0, !signResult.suppressedOutput.isEmpty {
+                appendLog(signResult.suppressedOutput)
+            }
             guard signExit == 0 else {
                 if !isCancelled {
                     appendLog("\n❌ Signing failed (exit \(signExit)).\n")
@@ -233,14 +286,18 @@ final class NotarizationManager: ObservableObject {
         }
 
         appendLog("\n🟦 ──── Step \(2 + stepOffset): Submitting for notarization ────\n\n")
-        let notarizeExit = await shell("/usr/bin/xcrun", args: [
+        let notarizeResult = await shell("/usr/bin/xcrun", args: [
             "notarytool", "submit",
             dmgPath,
             "--apple-id", credentials.appleID,
             "--password", credentials.appPassword,
             "--team-id", credentials.teamID,
             "--wait",
-        ])
+        ], outputMode: .liveStdoutOnly)
+        let notarizeExit = notarizeResult.exitCode
+        if notarizeExit != 0, !notarizeResult.suppressedOutput.isEmpty {
+            appendLog(notarizeResult.suppressedOutput)
+        }
         guard notarizeExit == 0 else {
             if !isCancelled {
                 appendLog("\n❌ Notarization failed (exit \(notarizeExit)).\n")
@@ -250,10 +307,14 @@ final class NotarizationManager: ObservableObject {
         appendLog("✅ Notarization accepted.\n\n")
 
         appendLog("🟦 ──── Step \(3 + stepOffset): Stapling the ticket ────\n\n")
-        let stapleExit = await shell("/usr/bin/xcrun", args: [
+        let stapleResult = await shell("/usr/bin/xcrun", args: [
             "stapler", "staple",
             dmgPath,
-        ])
+        ], outputMode: .liveStdoutOnly)
+        let stapleExit = stapleResult.exitCode
+        if stapleExit != 0, !stapleResult.suppressedOutput.isEmpty {
+            appendLog(stapleResult.suppressedOutput)
+        }
         guard stapleExit == 0 else {
             if !isCancelled {
                 appendLog("\n❌ Stapling failed (exit \(stapleExit)).\n")
@@ -265,7 +326,11 @@ final class NotarizationManager: ObservableObject {
     }
 
     @discardableResult
-    private func shell(_ executable: String, args: [String]) async -> Int32 {
+    private func shell(
+        _ executable: String,
+        args: [String],
+        outputMode: ShellOutputMode = .live
+    ) async -> ShellResult {
         await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 let process = Process()
@@ -298,36 +363,128 @@ final class NotarizationManager: ObservableObject {
                 let outPipe = Pipe()
                 let errPipe = Pipe()
                 process.standardOutput = outPipe
-                process.standardError = errPipe
 
-                outPipe.fileHandleForReading.readabilityHandler = { fh in
-                    let data = fh.availableData
-                    guard !data.isEmpty, let str = String(data: data, encoding: .utf8) else { return }
-                    Task { @MainActor [weak self] in self?.log += str }
+                let shouldLogStdoutLive: Bool
+                let shouldLogStderrLive: Bool
+                let shouldReplaySuppressedOutputOnFailure: Bool
+
+                switch outputMode {
+                case .live:
+                    shouldLogStdoutLive = true
+                    shouldLogStderrLive = true
+                    shouldReplaySuppressedOutputOnFailure = false
+                case .liveStdoutOnly:
+                    shouldLogStdoutLive = true
+                    shouldLogStderrLive = false
+                    shouldReplaySuppressedOutputOnFailure = true
+                case .quiet:
+                    shouldLogStdoutLive = false
+                    shouldLogStderrLive = false
+                    shouldReplaySuppressedOutputOnFailure = false
+                case .quietAllowFailureOutput:
+                    shouldLogStdoutLive = false
+                    shouldLogStderrLive = false
+                    shouldReplaySuppressedOutputOnFailure = true
                 }
-                errPipe.fileHandleForReading.readabilityHandler = { fh in
-                    let data = fh.availableData
-                    guard !data.isEmpty, let str = String(data: data, encoding: .utf8) else { return }
-                    Task { @MainActor [weak self] in self?.log += str }
+
+                let usesCombinedSuppressedPipe = !shouldLogStdoutLive && !shouldLogStderrLive
+                process.standardError = usesCombinedSuppressedPipe ? outPipe : errPipe
+
+                let lock = NSLock()
+                var suppressedOutput = ""
+
+                func streamProcessOutput(from fileHandle: FileHandle) {
+                    let data = fileHandle.availableData
+                    guard !data.isEmpty, let text = String(data: data, encoding: .utf8) else { return }
+                    Task { @MainActor [weak self] in self?.log += text }
+                }
+
+                if shouldLogStdoutLive {
+                    outPipe.fileHandleForReading.readabilityHandler = { fh in
+                        streamProcessOutput(from: fh)
+                    }
+                }
+
+                if shouldLogStderrLive {
+                    errPipe.fileHandleForReading.readabilityHandler = { fh in
+                        streamProcessOutput(from: fh)
+                    }
                 }
 
                 Task { @MainActor [weak self] in self?.currentProcess = process }
 
                 do {
                     try process.run()
+                    let outputGroup = DispatchGroup()
+
+                    if usesCombinedSuppressedPipe {
+                        outputGroup.enter()
+                        DispatchQueue.global(qos: .utility).async {
+                            defer { outputGroup.leave() }
+                            while true {
+                                let data = outPipe.fileHandleForReading.availableData
+                                guard !data.isEmpty else { break }
+                                if let text = String(data: data, encoding: .utf8) {
+                                    lock.lock()
+                                    suppressedOutput += text
+                                    lock.unlock()
+                                }
+                            }
+                        }
+                    } else if !shouldLogStdoutLive {
+                        outputGroup.enter()
+                        DispatchQueue.global(qos: .utility).async {
+                            defer { outputGroup.leave() }
+                            while true {
+                                let data = outPipe.fileHandleForReading.availableData
+                                guard !data.isEmpty else { break }
+                                if let text = String(data: data, encoding: .utf8) {
+                                    lock.lock()
+                                    suppressedOutput += text
+                                    lock.unlock()
+                                }
+                            }
+                        }
+                    }
+
+                    if !usesCombinedSuppressedPipe && !shouldLogStderrLive {
+                        outputGroup.enter()
+                        DispatchQueue.global(qos: .utility).async {
+                            defer { outputGroup.leave() }
+                            while true {
+                                let data = errPipe.fileHandleForReading.availableData
+                                guard !data.isEmpty else { break }
+                                if let text = String(data: data, encoding: .utf8) {
+                                    lock.lock()
+                                    suppressedOutput += text
+                                    lock.unlock()
+                                }
+                            }
+                        }
+                    }
+
                     process.waitUntilExit()
+                    outputGroup.wait()
                 } catch {
+                    outPipe.fileHandleForReading.readabilityHandler = nil
+                    errPipe.fileHandleForReading.readabilityHandler = nil
                     Task { @MainActor [weak self] in
                         self?.log += "❌ Launch error: \(error.localizedDescription)\n"
                     }
-                    continuation.resume(returning: -1)
+                    continuation.resume(returning: ShellResult(exitCode: -1, suppressedOutput: ""))
                     return
                 }
 
                 outPipe.fileHandleForReading.readabilityHandler = nil
                 errPipe.fileHandleForReading.readabilityHandler = nil
 
-                continuation.resume(returning: process.terminationStatus)
+                lock.lock()
+                let bufferedSuppressedOutput = suppressedOutput
+                lock.unlock()
+                continuation.resume(returning: ShellResult(
+                    exitCode: process.terminationStatus,
+                    suppressedOutput: shouldReplaySuppressedOutputOnFailure ? bufferedSuppressedOutput : ""
+                ))
             }
         }
     }
