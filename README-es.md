@@ -13,7 +13,7 @@ NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con 
 
 |                                               |
 | :-------------------------------------------: |
-| ![Ventana principal](Images/Main-window-es.png) |
+| ![Ventana principal](Images/AppleScript-es.png) |
 
 ## Características
 
@@ -22,7 +22,7 @@ NotarizeDMG es una aplicación para macOS, creada con SwiftUI, que notariza con 
 | **Dos modos**               | **Notarizar DMG** — firma y notariza un archivo `.dmg` existente. **Crear y Notarizar DMG** — crea un archivo DMG a partir de una `.app`, y luego lo firma y notariza usando `create-dmg` si está instalado o AppleScript + Finder como alternativa |
 | **Arrastrar y soltar**      | Arrastra una `.dmg` o `.app` a la ventana, o usa _Examinar…_ para buscarlo                                                                                                       |
 | **Carpeta de salida**       | En el modo `Crear y Notarizar DMG`, elige la carpeta donde se guardará la DMG resultante; la elección se guarda entre sesiones                                                 |
-| **Acción en un clic**       | Notarize ejecuta `codesign`, `xcrun notarytool submit --wait` y `xcrun stapler staple` en secuencia (precedidos por `create-dmg` o por el creador DMG interno basado en AppleScript en el modo `**Crear y Notarizar DMG**`)                  |
+| **Acción en un clic**       | Notarize ejecuta `codesign`, `xcrun notarytool submit --wait` y `xcrun stapler staple` en secuencia (precedidos por `create-dmg` o por el flujo interno basado en AppleScript en el modo `**Crear y Notarizar DMG**`)                  |
 | **Cancelar**                | Detiene una operación en curso en cualquier momento con el botón _Cancelar_                                                                                                  |
 | **Registro en tiempo real** | La salida de los comandos se muestra en un área de registro en tiempo real, con botones _Copiar_ y _Limpiar_                                                                    |
 | **Credenciales seguras**    | Apple ID, Team ID, la identidad de firma y la contraseña específica de la aplicación se almacenan como un único elemento JSON en el Llavero del sistema, nunca en texto plano   |
@@ -77,7 +77,8 @@ La imagen DMG creada tiene un diseño elegante que me gusta mucho y el proceso e
 
 |                                             |
 | :-----------------------------------------: |
-| ![Ventana de la DMG](Images/DMG-window.png) |
+| ![Ventana de la DMG](Images/Finder-applescript.png) |
+| ![Ventana de la DMG](Images/Finder-createdmg.png) |
 
 ## Notas 
 
