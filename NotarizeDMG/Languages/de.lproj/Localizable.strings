@@ -31,6 +31,9 @@
 "app_specific_password" = "App-spezifisches Passwort";
 "app_specific_password_placeholder" = "";
 "generate_app_password_footer" = "Erstellen Sie ein app-spezifisches Passwort auf [appleid.apple.com](https://account.apple.com)\nunter «Sign-In and Security» > «App-Specific Passwords».";
+"cancellation" = "Abbruch";
+"delete_output_dmgs_on_cancel" = "DMGs im Ausgabeordner nach dem Abbrechen löschen";
+"delete_output_dmgs_on_cancel_help" = "Wenn diese Option aktiviert ist, entfernt das Abbrechen von „Erstellen und Notarisieren“ die von diesem abgebrochenen Durchlauf erzeugten DMGs im gewählten Ausgabeordner und hängt die dazugehörigen gemounteten DMGs zwangsweise aus.";
 
 /* Sprachauswahl */
 "menu_language" = "Sprache";

@@ -31,6 +31,9 @@
 "app_specific_password" = "Password specifica per app";
 "app_specific_password_placeholder" = "";
 "generate_app_password_footer" = "Genera una password specifica per app su [appleid.apple.com](https://account.apple.com) nella sezione «Sign-In and Security» > «App-Specific Passwords».";
+"cancellation" = "Annullamento";
+"delete_output_dmgs_on_cancel" = "Elimina i DMG nella cartella di output dopo l’annullamento";
+"delete_output_dmgs_on_cancel_help" = "Quando è attivata, l’annullamento di Crea e notarizza rimuove i DMG creati dall’esecuzione annullata nella cartella di output selezionata e smonta forzatamente i DMG montati di quella stessa esecuzione.";
 
 /* Selettore lingua */
 "menu_language" = "Lingua";

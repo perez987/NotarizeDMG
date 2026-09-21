@@ -85,14 +85,30 @@ The created DMG image has an elegant design that I really like and the process i
 |:----|
 | ![create-dmg](Images/Finder-createdmg.png) | 
 
-**Note**: why is the background of the DMG's Finder window different??
+### Notes
 
-- AppleScript: the window background is generated via code; what you see is the result of trial-and-error adjustments until I found one I liked
-- create-dmg: the background is embedded as an image within the tool; since it is used in many different projects, I preferred to keep the original background exactly as implemented by its creator, *sindresorhus*.
+- Try the app "as is", without installing `create-dmg`. If you get stylized DMGs with an attractive Finder window layout, stick with that. If the DMGs have the basic, ugly Finder window layout typical of standard DMGs, install `create-dmg`: the DMG creation process is significantly faster, you don't need to grant automation permissions, and the DMG images will always feature an enhanced Finder window layout
+- The first time you run the application in AppleScript mode, a prompt informs to the user that "DMGBuildNotarize uses Finder automation to create custom installer window layouts" and asking for permission to allow DMGBuildNotarize to send Apple Events to Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in create-dmg mode
+- Why is the background of the DMG's Finder window different?
+   - AppleScript: the window background is generated via code; what you see is the result of trial-and-error adjustments until I found a valid one
+   - create-dmg: the background is embedded as an image within the tool; since it is used in many different projects, I preferred to keep the original background exactly as implemented by its creator, *sindresorhus*.
 
 ## create-dmg Help
 
 If the app does not detect `create-dmg` on the system, Build & Notarize automatically switches to the built-in AppleScript fallback and the UI explains that Finder Automation permission may be requested. The Help icon (?) displays an information window about the two operating modes of NotarizeDMG.
+
+## Settings
+
+The Settings window consolidates the following settings in one place:
+
+- Code signing and Apple Developer account
+- Option to delete output DMGs after cancellation
+- The language selection window remains a separate setting
+
+|  |
+|:----|
+| ![Settings](Images/Settings.png) |
+
 
 ## Requirements
 

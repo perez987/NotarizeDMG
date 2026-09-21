@@ -9,6 +9,7 @@ struct SettingsView: View {
     @State private var appleID = ""
     @State private var teamID = ""
     @State private var appPassword = ""
+    @AppStorage("deleteOutputDMGsOnCancel") private var deleteOutputDMGsOnCancel = false
 
     var body: some View {
         ZStack {
@@ -22,6 +23,7 @@ struct SettingsView: View {
                     VStack(spacing: 18) {
                         signingSection
                         accountSection
+                        cancellationSection
                     }
                     .padding(.vertical, 2)
                 }
@@ -158,6 +160,22 @@ struct SettingsView: View {
         }
         .padding(18)
         .glassCard(colorScheme: colorScheme, cornerRadius: 24, accentOpacity: 0.16)
+    }
+
+    private var cancellationSection: some View {
+        settingsSection(title: NSLocalizedString("cancellation", comment: "Cancellation settings section title")) {
+            Toggle(isOn: $deleteOutputDMGsOnCancel) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(NSLocalizedString("delete_output_dmgs_on_cancel", comment: "Delete output DMGs on cancel setting title"))
+                        .font(.body.weight(.medium))
+                    Text(NSLocalizedString("delete_output_dmgs_on_cancel_help", comment: "Delete output DMGs on cancel setting help"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .toggleStyle(.switch)
+        }
     }
 
     private func settingsSection<Content: View>(

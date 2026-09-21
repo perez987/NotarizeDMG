@@ -16,6 +16,7 @@ struct ContentView: View {
     @Environment(\.openWindow) private var openWindow
     @StateObject private var manager = NotarizationManager()
     @AppStorage("lastOutputFolderPath") private var lastOutputFolderPath = ""
+    @AppStorage("deleteOutputDMGsOnCancel") private var deleteOutputDMGsOnCancel = false
 
     @State private var mode: AppMode = .build
     @State private var showFilePicker = false
@@ -270,7 +271,7 @@ struct ContentView: View {
 
         return Button(label) {
             if isRunning {
-                manager.cancel()
+                manager.cancel(deleteOutputDMGsInOutputFolder: deleteOutputDMGsOnCancel)
             } else if mode == .notarize {
                 manager.notarize(credentials: credentials)
             } else {

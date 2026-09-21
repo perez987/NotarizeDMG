@@ -31,6 +31,9 @@
 "app_specific_password" = "App-Specific Password";
 "app_specific_password_placeholder" = "";
 "generate_app_password_footer" = "Generate an app-specific password at [appleid.apple.com](https://account.apple.com) under «Sign-In and Security» > «App-Specific Passwords».";
+"cancellation" = "Cancellation";
+"delete_output_dmgs_on_cancel" = "Delete output-folder DMGs after cancelling";
+"delete_output_dmgs_on_cancel_help" = "When enabled, cancelling Build & Notarize removes DMGs created by the cancelled run in the selected output folder and force-detaches mounted DMGs from that run.";
 
 /* Language selector */
 "menu_language" = "Language";
