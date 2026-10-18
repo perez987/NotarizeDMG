@@ -38,7 +38,7 @@ final class NotarizationManager: ObservableObject {
 
         func overlaps(with context: BuildCleanupContext) -> Bool {
             outputFolder == context.outputFolder &&
-            !expectedDMGURLs.isDisjoint(with: context.expectedDMGURLs)
+                !expectedDMGURLs.isDisjoint(with: context.expectedDMGURLs)
         }
     }
 
@@ -199,7 +199,8 @@ final class NotarizationManager: ObservableObject {
 
             if let cancellationCleanupTask,
                let cancellationCleanupScope,
-               cancellationCleanupScope.overlaps(with: buildCleanupContext) {
+               cancellationCleanupScope.overlaps(with: buildCleanupContext)
+            {
                 await cancellationCleanupTask.value
                 self.cancellationCleanupTask = nil
                 self.cancellationCleanupScope = nil
@@ -226,7 +227,8 @@ final class NotarizationManager: ObservableObject {
                         }
                     } else {
                         if buildLogOutput.localizedCaseInsensitiveContains("target already exists"),
-                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL)
+                        {
                             existingDMGConflictURL = conflictURL
                             conflictAppURL = appURL
                             conflictOutputFolderURL = outputFolder
@@ -284,7 +286,8 @@ final class NotarizationManager: ObservableObject {
                 } catch {
                     if !isCancelled {
                         if case AppleScriptDMGBuilderError.outputAlreadyExists = error,
-                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL) {
+                           let conflictURL = findExistingExpectedDMG(in: outputFolder, appURL: appURL)
+                        {
                             existingDMGConflictURL = conflictURL
                             conflictAppURL = appURL
                             conflictOutputFolderURL = outputFolder
@@ -772,7 +775,7 @@ final class NotarizationManager: ObservableObject {
         var lastError: Error?
         var didSuccessfullyRequestRemoval = false
 
-        for attempt in 0..<6 {
+        for attempt in 0 ..< 6 {
             let fileExists = FileManager.default.fileExists(atPath: url.path)
             if !fileExists {
                 if lastError == nil || didSuccessfullyRequestRemoval {
@@ -848,7 +851,8 @@ final class NotarizationManager: ObservableObject {
         for expectedURL in expectedDMGURLs(in: outputFolder, appURL: appURL) {
             var isDirectory = ObjCBool(false)
             if FileManager.default.fileExists(atPath: expectedURL.path, isDirectory: &isDirectory),
-               !isDirectory.boolValue {
+               !isDirectory.boolValue
+            {
                 return expectedURL
             }
         }

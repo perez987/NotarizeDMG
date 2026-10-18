@@ -77,7 +77,6 @@ struct SettingsView: View {
                             .textFieldStyle(.plain)
                             .multilineTextAlignment(.trailing)
                             .foregroundStyle(.primary)
-                            
                     }
                     .help(NSLocalizedString("signing_identity_example", comment: "Signing identity example"))
 

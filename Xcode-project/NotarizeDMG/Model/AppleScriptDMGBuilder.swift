@@ -181,7 +181,7 @@ private struct FinderAutomationAuthorizationError: LocalizedError {
             return NSLocalizedString("finder_automation_permission_message", comment: "Finder automation permission help")
         case .targetNotRunning, .targetNotAccessible:
             return NSLocalizedString("finder_automation_unavailable_message", comment: "Finder automation unavailable message")
-        case .failed(let status):
+        case let .failed(status):
             return String(
                 format: NSLocalizedString("finder_automation_failed_format", comment: "Finder automation failure message"),
                 Int64(status)
@@ -212,9 +212,17 @@ struct AppleScriptDMGBuilder {
         static let arrowHeadLength: CGFloat = 28
         static let arrowHeadHalfHeight: CGFloat = 18
 
-        static var windowRight: Int { windowOriginX + backgroundWidth }
-        static var windowBottom: Int { windowOriginY + backgroundHeight }
-        static var backgroundSize: NSSize { NSSize(width: CGFloat(backgroundWidth), height: CGFloat(backgroundHeight)) }
+        static var windowRight: Int {
+            windowOriginX + backgroundWidth
+        }
+
+        static var windowBottom: Int {
+            windowOriginY + backgroundHeight
+        }
+
+        static var backgroundSize: NSSize {
+            NSSize(width: CGFloat(backgroundWidth), height: CGFloat(backgroundHeight))
+        }
     }
 
     private struct Context {
@@ -347,10 +355,10 @@ struct AppleScriptDMGBuilder {
     }
 
     private func applyFinderLayout(
-        appURL: URL,
+        appURL _: URL,
         context: Context,
         runProcess: @escaping (_ executable: String, _ args: [String]) async -> Int32,
-        onOutput: @escaping (_ text: String) -> Void
+        onOutput _: @escaping (_ text: String) -> Void
     ) async throws {
         try fileManager.createDirectory(at: context.mountedVolumeURL, withIntermediateDirectories: true)
 
@@ -428,7 +436,7 @@ struct AppleScriptDMGBuilder {
         }
 
         var lastExitCode: Int32 = 1
-        for attempt in 0..<6 {
+        for attempt in 0 ..< 6 {
             let exitCode = await runProcess("/usr/bin/hdiutil", arguments)
             lastExitCode = exitCode
             if exitCode == 0 {
@@ -519,7 +527,8 @@ struct AppleScriptDMGBuilder {
 
         while true {
             if let currentState = fileState(at: dsStoreURL),
-               currentState != initialState {
+               currentState != initialState
+            {
                 return
             }
 
