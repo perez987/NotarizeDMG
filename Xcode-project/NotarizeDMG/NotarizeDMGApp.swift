@@ -1,0 +1,65 @@
+import SwiftUI
+
+@main
+struct NotarizeDMGApp: App {
+    private enum WindowID {
+        static let help = "help"
+    }
+
+    @StateObject private var credentials = CredentialsManager.shared
+    @State private var isLanguageSelectorPresented = false
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(credentials)
+                .sheet(isPresented: $isLanguageSelectorPresented) {
+                    LanguageSelectorView()
+                }
+        }
+        .windowResizability(.contentSize)
+
+        Window(
+            NSLocalizedString("notarizeDMG_help", comment: "Help window title"),
+            id: WindowID.help
+        ) {
+            HelpView()
+        }
+        .windowResizability(.contentSize)
+
+        Settings {
+            SettingsView()
+                .environmentObject(credentials)
+        }
+
+        .commands {
+            CommandGroup(after: .appInfo) {
+                // Settings to check for updates
+                Button(
+                    NSLocalizedString(
+                        "Check for Updates…",
+                        comment: "Menu item to check for app updates"
+                    )
+                ) {
+                    GitHubUpdateChecker.shared.checkForUpdates(
+                        userInitiated: true
+                    )
+                }
+                .keyboardShortcut("u", modifiers: [.command])
+            }
+            CommandMenu(
+                NSLocalizedString("menu_language", comment: "Language menu")
+            ) {
+                Button(
+                    NSLocalizedString(
+                        "menu_select_language",
+                        comment: "Select language menu item"
+                    )
+                ) {
+                    isLanguageSelectorPresented = true
+                }
+                .keyboardShortcut("l", modifiers: .command)
+            }
+        }
+    }
+}

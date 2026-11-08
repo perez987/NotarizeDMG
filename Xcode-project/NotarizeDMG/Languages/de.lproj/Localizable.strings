@@ -1,0 +1,93 @@
+/* Allgemeine UI */
+"drop_dmg_here" = "DMG hier ablegen";
+"drop_app_here" = "App hier ablegen";
+"browse" = "Durchsuchen…";
+"configure_credentials_in_settings" = "Anmeldedaten in Einstellungen konfigurieren";
+"settings" = "Einstellungen…";
+"cancel" = "Abbrechen";
+"save" = "Speichern";
+"notarize" = "Notarisieren";
+"build_and_notarize" = "DMG erstellen und notarisieren";
+"mode_notarize" = "DMG notarisieren";
+"mode_build" = "Erstellen und notarisieren";
+"output_folder_placeholder" = "Ausgabeordner für das DMG wählen…";
+"choose_folder" = "Wählen…";
+"ready" = "Bereit";
+"log" = "Protokoll";
+"copy" = "Kopieren";
+"clear" = "Leeren";
+"file_picker_error_format" = "Dateiauswahl-Fehler: %@\n";
+"help" = "Hilfe";
+
+/* Einstellungen */
+"signing_identity" = "Identität";
+"signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
+"code_signing" = "Code-Signierung";
+"apple_developer_account" = "Apple-Entwicklerkonto";
+"apple_id" = "Apple ID";
+"apple_email_placeholder" = "";
+"team_id" = "Team-ID";
+"team_id_placeholder" = "";
+"app_specific_password" = "App-spezifisches Passwort";
+"app_specific_password_placeholder" = "";
+"generate_app_password_footer" = "Erstellen Sie ein app-spezifisches Passwort auf [appleid.apple.com](https://account.apple.com)\nunter «Sign-In and Security» > «App-Specific Passwords».";
+"cancellation" = "Abbruch";
+"delete_output_dmgs_on_cancel" = "DMGs im Ausgabeordner nach dem Abbrechen löschen";
+"delete_output_dmgs_on_cancel_help" = "Wenn diese Option aktiviert ist, entfernt das Abbrechen von „Erstellen und Notarisieren“ die von diesem abgebrochenen Durchlauf erzeugten DMGs im gewählten Ausgabeordner und hängt die dazugehörigen gemounteten DMGs zwangsweise aus.";
+
+/* Sprachauswahl */
+"menu_language" = "Sprache";
+"menu_select_language" = "Sprache auswählen...";
+"language_selector_title" = "Sprache auswählen";
+"accept" = "Akzeptieren";
+"ok" = "OK";
+"language_changed_title" = "Sprache geändert";
+"language_changed_message" = "Bitte starten Sie die Anwendung neu,\num die neue Sprache anzuwenden.";
+
+/* Hilfe */
+"notarizeDMG_help" = "Ergänzende Hilfe zu NotarizeDMG";
+"help_button_tooltip" = "So funktioniert die DMG-Erstellung";
+"help_title" = "Wege zur DMG-Erstellung";
+"help_step1_title" = "Zwei Wege zum Erstellen des DMG";
+"help_step1_body" = "Im Modus **DMG erstellen und notarisieren** erstellt NotarizeDMG zunächst ein ansprechendes DMG aus Ihrer signierten `.app` und signiert, notarisiert und stapelt anschließend das DMG. Wenn [create-dmg](https://github.com/sindresorhus/create-dmg) installiert ist, wird es bevorzugt verwendet; andernfalls greift die App auf einen integrierten AppleScript- und Finder-Ablauf zurück.";
+"help_step2_title" = "create-dmg installieren";
+"help_step2_body" = "Um create-dmg auf Ihrem System zu haben, folgen Sie diesen Schritten:\n⎯ [Homebrew](https://brew.sh) installieren\n⎯ Node 20+ installieren → `brew install node`\n⎯ create-dmg installieren → `npm install --global create-dmg`\n⎯ Optional → Wenn Sie eine Meldung über\n     `allow-scripts=fs-xattr,macos-alias`\n     erhalten, führen Sie aus\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
+"help_step3_title" = "Bevorzugter Weg: create-dmg";
+"help_step3_body" = "⎯ create-dmg ist verfügbar unter\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ NotarizeDMG erkennt das Tool automatisch und verwendet es vor der Notarisierung zum Erstellen des DMG.\n⎯ Dieser Weg ist schnell und benötigt keine Finder-Automatisierungsberechtigung.";
+"help_step4_title" = "Ausweichweg: AppleScript + Finder";
+"help_step4_body" = "⎯ Wenn create-dmg nicht installiert ist, verwendet NotarizeDMG einen integrierten AppleScript-Ablauf.\n⎯ Beim ersten Mal kann macOS Sie auffordern, die Finder-Automatisierung zu erlauben.\n⎯ Auch dieser Weg erstellt das DMG und die App signiert, notarisiert und stapelt es anschließend automatisch.";
+"help_workflow_title" = "Was im Hintergrund passiert";
+"help_workflow_body" = "Die App führt drei Befehle der Reihe nach aus:\n⎯ `codesign --sign \"<Identität>\" --timestamp \"<Datei.dmg>\"`\n⎯ `xcrun notarytool submit \"<Datei.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<Datei.dmg>\"`";
+
+/* Ausweichweg */
+"build_fallback_title" = "AppleScript-Ausweichweg bereit";
+"build_fallback_message" = "create-dmg ist nicht installiert, daher verwendet Erstellen und Notarisieren den integrierten Finder-basierten Ausweichweg. macOS kann eine Finder-Automatisierungsberechtigung anfordern.";
+
+/* Finder-Automatisierung */
+"finder_automation_permission_message" = "NotarizeDMG benötigt die Finder-Automatisierungsberechtigung, um das DMG-Fensterlayout anzuwenden. Erlauben Sie den Finder-Zugriff bei der Aufforderung oder aktivieren Sie NotarizeDMG unter Systemeinstellungen > Datenschutz und Sicherheit > Automatisierung und versuchen Sie es erneut.";
+"finder_automation_unavailable_message" = "Finder ist derzeit für die Automatisierung nicht verfügbar. Versuchen Sie es erneut, nachdem Finder vollständig gestartet ist.";
+"finder_automation_failed_format" = "Die Prüfung der Finder-Automatisierungsberechtigung ist fehlgeschlagen (OSStatus %lld).";
+"finder_layout_not_persisted_message" = "Finder hat das DMG-Fensterlayout nicht auf die Festplatte geschrieben. Vergewissern Sie sich, dass NotarizeDMG unter Systemeinstellungen > Datenschutz und Sicherheit > Automatisierung den Finder steuern darf, und versuchen Sie es erneut.";
+//"fallback_dmg_background_title" = "In Programme ziehen";
+//"fallback_dmg_background_subtitle" = "Installieren Sie die App, indem Sie sie auf die Verknüpfung „Programme“ ziehen.";
+"fallback_command_failed_format" = "Befehl fehlgeschlagen: %@ (Exit %d).";
+"fallback_applescript_compilation_failed" = "Das AppleScript konnte nicht kompiliert werden.";
+"fallback_output_exists_format" = "Die Ausgabedatei existiert bereits: %@";
+
+/* Hinweis: DMG existiert bereits */
+"dmg_exists_alert_title" = "DMG existiert bereits";
+"dmg_exists_alert_message_format" = "\"%@\" existiert bereits im Ausgabeordner. Möchten Sie sie ersetzen?";
+"dmg_exists_alert_cancel" = "Abbrechen";
+"dmg_exists_alert_replace" = "Ersetzen";
+
+/* Update Check */
+"Check for Updates…" = "Nach Updates suchen…";
+"UpdateAvailable" = "Update verfügbar";
+"UpdateAvailableInfo" = "NotarizeDMG %@ ist jetzt verfügbar. Möchten Sie es herunterladen?";
+"DownloadUpdate" = "Update herunterladen";
+"UpdateLater" = "Später";
+"UpToDate" = "Sie sind auf dem neuesten Stand!";
+"UpToDateInfo" = "NotarizeDMG %@ ist aktuell die neueste Version.";
+"UpdateCheckError" = "Update-Prüfung fehlgeschlagen";
+"UpdateCheckFailed" = "Abrufen der Update-Informationen fehlgeschlagen.";
+"UpdateCheckNetworkError" = "Verbindung zum Update-Server nicht möglich. Bitte überprüfen Sie Ihre Internetverbindung.";

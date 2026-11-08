@@ -1,0 +1,93 @@
+/* General UI */
+"drop_dmg_here" = "Drop DMG here";
+"drop_app_here" = "Drop .app here";
+"browse" = "Browse…";
+"configure_credentials_in_settings" = "Configure credentials in Settings";
+"settings" = "Settings…";
+"cancel" = "Cancel";
+"save" = "Save";
+"notarize" = "Notarize";
+"build_and_notarize" = "Build & Notarize DMG";
+"mode_notarize" = "Notarize DMG";
+"mode_build" = "Build & Notarize";
+"output_folder_placeholder" = "Choose output folder for the DMG…";
+"choose_folder" = "Choose…";
+"ready" = "Ready";
+"log" = "Log";
+"copy" = "Copy";
+"clear" = "Clear";
+"file_picker_error_format" = "File picker error: %@\n";
+"help" = "Help";
+
+/* Settings */
+"signing_identity" = "Identity";
+"signing_identity_example" = "Developer ID Application: Name (xxxxxxxxxx)";
+"code_signing" = "Code Signing\n";
+"apple_developer_account" = "Apple Developer Account\n";
+"apple_id" = "Apple ID";
+"apple_email_placeholder" = "";
+"team_id" = "Team ID";
+"team_id_placeholder" = "";
+"app_specific_password" = "App-Specific Password";
+"app_specific_password_placeholder" = "";
+"generate_app_password_footer" = "Generate an app-specific password at [appleid.apple.com](https://account.apple.com) under «Sign-In and Security» > «App-Specific Passwords».";
+"cancellation" = "Cancellation";
+"delete_output_dmgs_on_cancel" = "Delete output-folder DMGs after cancelling";
+"delete_output_dmgs_on_cancel_help" = "When enabled, cancelling Build & Notarize removes DMGs created by the cancelled run in the selected output folder and force-detaches mounted DMGs from that run.";
+
+/* Language selector */
+"menu_language" = "Language";
+"menu_select_language" = "Select Language...";
+"language_selector_title" = "Select Language";
+"accept" = "Accept";
+"ok" = "OK";
+"language_changed_title" = "Language Changed";
+"language_changed_message" = "Please restart the application\nto apply the new language.";
+
+/* Help */
+"notarizeDMG_help" = "NotarizeDMG Supplementary Help";
+"help_button_tooltip" = "How DMG creation works";
+"help_title" = "DMG creation paths";
+"help_step1_title" = "Two ways to build the DMG";
+"help_step1_body" = "In **Build & Notarize** mode, NotarizeDMG first creates a polished DMG from your signed `.app`, then signs, notarizes, and staples the DMG. It prefers [create-dmg](https://github.com/sindresorhus/create-dmg) when installed and falls back to a built-in AppleScript + Finder workflow when create-dmg is not available.";
+"help_step2_title" = "Install create-dmg";
+"help_step2_body" = "To have create-dmg on your system, follow these steps:\n⎯ Install [Homebrew](https://brew.sh)\n⎯ Install Node 20+ → `brew install node`\n⎯ Install create-dmg → `npm install --global create-dmg`\n⎯ Optional → If you get a message about\n     `allow-scripts=fs-xattr,macos-alias`\n     run\n     `npm config set allow-scripts=fs-xattr,macos-alias --location=user`";
+"help_step3_title" = "Preferred path: create-dmg";
+"help_step3_body" = "⎯ create-dmg is available at\n     `/usr/local/bin/create-dmg` (Intel Mac)\n     `/opt/homebrew/bin/create-dmg` (Apple Silicon Mac).\n⎯ NotarizeDMG detects it automatically and uses it to build the DMG before notarization.\n⎯ This path is fast and does not require Finder Automation permission.";
+"help_step4_title" = "Fallback path: AppleScript + Finder";
+"help_step4_body" = "⎯ If create-dmg is not installed, NotarizeDMG falls back to a built-in AppleScript workflow.\n⎯ macOS may ask you to allow Finder Automation the first time.\n⎯ The fallback still creates the DMG, then the app signs, notarizes, and staples it automatically.";
+"help_workflow_title" = "What happens under the hood";
+"help_workflow_body" = "The app runs three commands in sequence:\n⎯ `codesign --sign \"<Identity>\" --timestamp \"<file.dmg>\"`\n⎯ `xcrun notarytool submit \"<file.dmg>\" --apple-id … --password … --team-id … --wait`\n⎯ `xcrun stapler staple \"<file.dmg>\"`";
+
+/* Build fallback */
+"build_fallback_title" = "AppleScript fallback ready";
+"build_fallback_message" = "create-dmg is not installed, so Build & Notarize will use the built-in Finder-based fallback. macOS may ask for Finder Automation permission.";
+
+/* Finder Automation */
+"finder_automation_permission_message" = "NotarizeDMG needs Finder Automation permission to apply the DMG window layout. Allow Finder access when prompted, or enable NotarizeDMG in System Settings › Privacy & Security › Automation, then try again.";
+"finder_automation_unavailable_message" = "Finder is not currently available for Automation. Try again after Finder finishes launching.";
+"finder_automation_failed_format" = "Finder Automation permission check failed (OSStatus %lld).";
+"finder_layout_not_persisted_message" = "Finder did not write the DMG window layout to disk. Confirm that NotarizeDMG has permission to control Finder in System Settings › Privacy & Security › Automation, then try again.";
+//"fallback_dmg_background_title" = "Drag to Applications";
+//"fallback_dmg_background_subtitle" = "Install the app by dragging it onto the Applications shortcut.";
+"fallback_command_failed_format" = "Command failed: %@ (exit %d).";
+"fallback_applescript_compilation_failed" = "Failed to compile AppleScript source.";
+"fallback_output_exists_format" = "The output file already exists: %@";
+
+/* Existing DMG conflict alert */
+"dmg_exists_alert_title" = "DMG already exists";
+"dmg_exists_alert_message_format" = "\"%@\" already exists in the output folder. Do you want to replace it?";
+"dmg_exists_alert_cancel" = "Cancel";
+"dmg_exists_alert_replace" = "Replace";
+
+/* Update Check */
+"Check for Updates…" = "Check for Updates…";
+"UpdateAvailable" = "Update Available";
+"UpdateAvailableInfo" = "NotarizeDMG %@ is now available. Would you like to download it?";
+"DownloadUpdate" = "Download Update";
+"UpdateLater" = "Later";
+"UpToDate" = "You're up to date!";
+"UpToDateInfo" = "NotarizeDMG %@ is currently the latest version.";
+"UpdateCheckError" = "Update Check Failed";
+"UpdateCheckFailed" = "Failed to retrieve update information.";
+"UpdateCheckNetworkError" = "Unable to connect to the update server. Please check your internet connection.";
