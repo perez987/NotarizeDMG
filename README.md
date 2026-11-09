@@ -90,7 +90,7 @@ The created DMG image has an elegant design that I really like and the process i
 - Try the application "as-is," without installing `create-dmg`. If you get DMG files with an attractive Finder window layout, stick with that option. If the DMGs have the basic, unappealing layout typical of standard DMGs, install `create-dmg`: the DMG creation process is significantly faster, you don't need to grant automation permissions, and the DMG images always feature an improved Finder window layout.
 - The first time you run the application in AppleScript mode, a prompt will appear informing the user that "DMGBuildNotarize uses Finder automation to create custom installation window layouts" and asking for permission for DMGBuildNotarize to send Apple Events to the Finder. You must grant this permission for the DMG to be created correctly. This is not necessary if the DMG is created in `create-dmg` mode.
 - Why is the DMG Finder window background different? 
-   - AppleScript: the window background is generated in code, with a cyan grid, a rounded blue frame and an arrow between the icons. The screenshot above shows an earlier design.
+   - AppleScript: the window background is generated in code, with a cyan grid, a rounded blue frame and an arrow between the icons.
    - `create-dmg`: the background is embedded as an image within the tool; since `create-dmg` is used in many different projects, I preferred to keep the original background exactly as implemented by its creator, *sindresorhus*.
 
 ## Requirements
