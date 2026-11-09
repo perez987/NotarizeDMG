@@ -225,22 +225,23 @@ struct AppleScriptDMGBuilder {
     private enum FinderLayout {
         static let windowOriginX = 100
         static let windowOriginY = 100
-        static let backgroundWidth = 644
-        static let backgroundHeight = 432
+        static let backgroundWidth = 540
+        static let backgroundHeight = 400
         // Finder's window bounds include its title bar, unlike the background.
         static let windowTitleBarHeight = 28
-        static let iconSize = 128
+        static let iconSize = 144
         static let textSize = 12
-        static let appPositionX = 160
-        static let appPositionY = 195
-        static let applicationsPositionX = 484
-        static let applicationsPositionY = 195
+        static let appPositionX = 140
+        static let appPositionY = 175
+        static let applicationsPositionX = 380
+        static let applicationsPositionY = 175
         static let backgroundDirectoryName = ".background"
         static let backgroundFileName = "background.png"
-        static let backgroundCornerRadius: CGFloat = 20
-        static let arrowLineWidth: CGFloat = 2.5
-        static let arrowHeadLength: CGFloat = 10
-        static let arrowHeadHalfHeight: CGFloat = 9
+        static let backgroundTopInset: CGFloat = 36
+        static let backgroundCornerRadius: CGFloat = 18
+        static let arrowLineWidth: CGFloat = 10
+        static let arrowHeadLength: CGFloat = 28
+        static let arrowHeadHalfHeight: CGFloat = 18
 
         static var windowRight: Int {
             windowOriginX + backgroundWidth
@@ -724,89 +725,48 @@ struct AppleScriptDMGBuilder {
         NSGraphicsContext.current = nsContext
         defer { NSGraphicsContext.restoreGraphicsState() }
 
-        NSColor.white.setFill()
+        NSColor(calibratedWhite: 0.97, alpha: 1).setFill()
         NSBezierPath(rect: NSRect(origin: .zero, size: imageSize)).fill()
 
-        let frame = CGRect(x: 43, y: 56, width: 558, height: 335)
-        let framePath = CGPath(
-            roundedRect: frame,
-            cornerWidth: FinderLayout.backgroundCornerRadius,
-            cornerHeight: FinderLayout.backgroundCornerRadius,
-            transform: nil
-        )
-        guard let gradient = CGGradient(
-            colorsSpace: colorSpace,
-            colors: [
-                NSColor(srgbRed: 0, green: 0.76, blue: 0.92, alpha: 1).cgColor,
-                NSColor(srgbRed: 0, green: 0.43, blue: 1, alpha: 1).cgColor,
-            ] as CFArray,
-            locations: nil
-        ) else {
+        guard
+            let gradient = NSGradient(
+                colors: [
+                    NSColor(
+                        calibratedRed: 0.43, green: 0.67, blue: 0.98, alpha: 1),
+                    NSColor(
+                        calibratedRed: 0.23, green: 0.43, blue: 0.89, alpha: 1),
+                ]
+            )
+        else {
             throw CocoaError(.fileWriteUnknown)
         }
-
-        cgContext.saveGState()
-        cgContext.addPath(framePath)
-        cgContext.clip()
-        let gridSpacing: CGFloat = 9.2
-        for major in [false, true] {
-            cgContext.beginPath()
-            for index in 0...61 where (index % 4 == 0) == major {
-                let x = frame.minX + CGFloat(index) * gridSpacing
-                cgContext.move(to: CGPoint(x: x, y: frame.minY))
-                cgContext.addLine(to: CGPoint(x: x, y: frame.maxY))
-            }
-            for index in 0...37 where (index % 4 == 0) == major {
-                let y = frame.minY + CGFloat(index) * gridSpacing
-                cgContext.move(to: CGPoint(x: frame.minX, y: y))
-                cgContext.addLine(to: CGPoint(x: frame.maxX, y: y))
-            }
-            let gridColor = NSColor(
-                srgbRed: 0, green: 0.75, blue: 0.85,
-                alpha: major ? 0.22 : 0.10
-            )
-            cgContext.setStrokeColor(gridColor.cgColor)
-            cgContext.setLineWidth(0.5)
-            cgContext.strokePath()
-        }
-        cgContext.restoreGState()
-
-        cgContext.saveGState()
-        cgContext.addPath(framePath)
-        cgContext.setLineWidth(4)
-        cgContext.replacePathWithStrokedPath()
-        cgContext.clip()
-        cgContext.drawLinearGradient(
-            gradient,
-            start: CGPoint(x: frame.minX, y: 0),
-            end: CGPoint(x: frame.maxX, y: 0),
-            options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
+        gradient.draw(
+            in: NSRect(
+                x: 0,
+                y: imageSize.height - FinderLayout.backgroundTopInset - 96,
+                width: imageSize.width,
+                height: 96 + FinderLayout.backgroundTopInset
+            ),
+            angle: 90
         )
-        cgContext.restoreGState()
 
-        cgContext.saveGState()
-        cgContext.clip(
-            to: CGRect(x: frame.minX, y: 116, width: frame.width, height: 2)
+        let cardRect = NSRect(
+            x: 28,
+            y: 28,
+            width: imageSize.width - 56,
+            height: imageSize.height - FinderLayout.backgroundTopInset - 56
         )
-        cgContext.drawLinearGradient(
-            gradient,
-            start: CGPoint(x: frame.minX, y: 0),
-            end: CGPoint(x: frame.maxX, y: 0),
-            options: []
-        )
-        cgContext.restoreGState()
-
-        let arrowY = imageSize.height - CGFloat(FinderLayout.appPositionY)
-        let arrowCenterX = CGFloat(
-            FinderLayout.appPositionX + FinderLayout.applicationsPositionX
-        ) / 2
-        let leftPoint = NSPoint(x: arrowCenterX - 56, y: arrowY)
-        let rightPoint = NSPoint(x: arrowCenterX + 56, y: arrowY)
         NSColor.white.withAlphaComponent(0.9).setFill()
         NSBezierPath(
-            rect: NSRect(x: arrowCenterX - 68, y: arrowY - 16, width: 136, height: 32)
+            roundedRect: cardRect,
+            xRadius: FinderLayout.backgroundCornerRadius,
+            yRadius: FinderLayout.backgroundCornerRadius
         ).fill()
-        NSColor(srgbRed: 0, green: 0.69, blue: 0.91, alpha: 1).setStroke()
+
+        let leftPoint = NSPoint(x: 218, y: 185)
+        let rightPoint = NSPoint(x: 284, y: 185)
+        NSColor(calibratedRed: 0.20, green: 0.48, blue: 0.92, alpha: 0.95)
+            .setStroke()
         let arrow = NSBezierPath()
         arrow.lineWidth = FinderLayout.arrowLineWidth
         arrow.lineCapStyle = .round
@@ -817,7 +777,6 @@ struct AppleScriptDMGBuilder {
         let arrowHead = NSBezierPath()
         arrowHead.lineWidth = FinderLayout.arrowLineWidth
         arrowHead.lineCapStyle = .round
-        arrowHead.lineJoinStyle = .round
         arrowHead.move(
             to: NSPoint(
                 x: rightPoint.x - FinderLayout.arrowHeadLength,
