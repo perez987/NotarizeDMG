@@ -153,14 +153,13 @@ struct DefaultFinderAutomationAuthorizer: FinderAutomationAuthorizing {
         configuration.activates = false
         configuration.addsToRecentItems = false
 
-        do {
-            _ = try await NSWorkspace.shared.openApplication(
+        return await withCheckedContinuation { continuation in
+            NSWorkspace.shared.openApplication(
                 at: finderURL,
                 configuration: configuration
-            )
-            return true
-        } catch {
-            return false
+            ) { _, error in
+                continuation.resume(returning: error == nil)
+            }
         }
     }
 }
